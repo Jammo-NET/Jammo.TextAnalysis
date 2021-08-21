@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -10,74 +11,55 @@ namespace JammaNalysis.CsInspections
     public class FileSchema
     {
         public UsingStatement[] UsingStatements;
-        
-        public FileSchema(FileStream file)
+        public NamespaceDeclaration[] Namespaces;
+        public ClassDeclaration[] Classes;
+
+        public static FileSchema Create(FileStream file)
         {
             var reader = new StreamReader(file);
-            var result = CSharpSyntaxTree.ParseText(reader.ReadToEndAsync().Result);
+            
+            return Create(reader.ReadToEndAsync().Result);
+        }
+
+        public static FileSchema Create(string text)
+        {
+            var schema = new FileSchema();
+            var result = CSharpSyntaxTree.ParseText(text);
+            
             var root = result.GetCompilationUnitRoot();
 
-            UsingStatements = root.Usings.Select(statement => 
+            schema.UsingStatements = root.Usings.Select(statement =>
                 new UsingStatement(
-                    statement.Name.ToString(),
-                    statement.Alias?.Name.ToString(),
-                    statement.Alias != null,
-                    statement.StaticKeyword.Span.Length > 0)).ToArray();
+                    IndexSpan.FromTextSpan(statement.Span),
+                    statement)).ToArray();
+
+            var namespaces = new List<NamespaceDeclaration>();
+            var types = new List<ClassDeclaration>();
+
+            foreach (var member in root.Members)
+            {
+                switch (member)
+                {
+                    case NamespaceDeclarationSyntax ns:
+                        namespaces.Add(
+                            new NamespaceDeclaration(IndexSpan.FromTextSpan(ns.Span), ns));
+                        break;
+                    case ClassDeclarationSyntax classType:
+                        types.Add(
+                            new ClassDeclaration(IndexSpan.FromTextSpan(classType.Span), classType));
+                        break;
+                }
+            }
+
+            schema.Namespaces = namespaces.ToArray();
+            schema.Classes = types.ToArray();
+
+            return schema;
         }
-    }
 
-    public abstract class Statement
-    {
-        public IndexSpan Span;
-    }
-
-    public abstract class BlockStatement : Statement
-    {
-        public Block Block;
-    }
-    
-    public class Block
-    {
-        public IndexSpan Span;
-        
-        public Statement[] Statements;
-        public int ScopeLevel;
-    }
-
-    public class UsingStatement : Statement
-    {
-        public string NamespaceName;
-        public string DeclarationName;
-        
-        public bool IsDeclaration;
-        public bool IsStaticDeclaration;
-
-        public UsingStatement(string namespaceName, string declarationName, bool isDeclaration, bool isStaticDeclaration)
+        private FileSchema()
         {
-            NamespaceName = namespaceName;
-            DeclarationName = declarationName;
-            IsDeclaration = isDeclaration;
-            IsStaticDeclaration = isStaticDeclaration;
+            
         }
-    }
-
-    public class ForLoop : BlockStatement
-    {
-        
-    }
-
-    public class ForeachLoop : BlockStatement
-    {
-        
-    }
-
-    public class WhileLoop : BlockStatement
-    {
-        
-    }
-
-    public class DoWhileLoop : BlockStatement
-    {
-        
     }
 }

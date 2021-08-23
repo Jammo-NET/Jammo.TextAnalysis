@@ -1,8 +1,9 @@
 using System.Linq;
+using JammaNalysis.Compilation;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace JammaNalysis.CsInspections
+namespace JammaNalysis.CsFileAnalysis
 {
     public class FieldDeclaration : Statement, IMember
     {

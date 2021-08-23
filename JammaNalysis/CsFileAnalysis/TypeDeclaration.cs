@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using JammaNalysis.Compilation;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace JammaNalysis.CsInspections
+namespace JammaNalysis.CsFileAnalysis
 {
     public abstract class TypeDeclaration : BlockStatement, IMember
     {
@@ -13,6 +14,7 @@ namespace JammaNalysis.CsInspections
         public IMember[] Members;
         
         public bool IsStatic { get; set; }
+        public bool IsSealed { get; set; }
         public bool IsAbstract { get; set; }
         public bool IsVirtual { get; set; }
         public bool IsOverride { get; set; }
@@ -43,6 +45,9 @@ namespace JammaNalysis.CsInspections
                         break;
                     case SyntaxKind.StaticKeyword:
                         IsStatic = true;
+                        break;
+                    case SyntaxKind.SealedKeyword:
+                        IsSealed = true;
                         break;
                     case SyntaxKind.AbstractKeyword:
                         IsAbstract = true;

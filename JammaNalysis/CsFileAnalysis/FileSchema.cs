@@ -1,18 +1,17 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.CodeAnalysis;
+using JammaNalysis.Compilation;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace JammaNalysis.CsInspections
+namespace JammaNalysis.CsFileAnalysis
 {
     public class FileSchema
     {
         public UsingStatement[] UsingStatements;
         public NamespaceDeclaration[] Namespaces;
-        public ClassDeclaration[] Classes;
+        public NamespaceDeclaration GlobalNamespace => Namespaces.FirstOrDefault();
 
         public static FileSchema Create(FileStream file)
         {
@@ -35,6 +34,8 @@ namespace JammaNalysis.CsInspections
 
             var namespaces = new List<NamespaceDeclaration>();
             var types = new List<ClassDeclaration>();
+            
+            namespaces.Add(new NamespaceDeclaration(new IndexSpan(0, 0)));
 
             foreach (var member in root.Members)
             {
@@ -52,7 +53,7 @@ namespace JammaNalysis.CsInspections
             }
 
             schema.Namespaces = namespaces.ToArray();
-            schema.Classes = types.ToArray();
+            schema.GlobalNamespace.Types = types.Cast<TypeDeclaration>().ToArray();
 
             return schema;
         }

@@ -1,14 +1,15 @@
 using System.Linq;
+using JammaNalysis.Compilation;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace JammaNalysis.CsInspections
+namespace JammaNalysis.CsFileAnalysis
 {
     public class MethodDeclaration : BlockStatement, IMember
     {
         public string Name { get; set; }
+        public string ReturnType;
         public DeclarationAccessibility Accessibility { get; set; }
-        public IMember[] Members;
 
         public bool IsStatic { get; set; }
         public bool IsAbstract { get; set; }
@@ -24,6 +25,7 @@ namespace JammaNalysis.CsInspections
         public MethodDeclaration(IndexSpan span, MethodDeclarationSyntax method) : base(span)
         {
             Name = method.Identifier.Text;
+            ReturnType = method.ReturnType.ToString();
 
             foreach (var modifier in method.Modifiers)
             {

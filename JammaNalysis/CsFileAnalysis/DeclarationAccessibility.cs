@@ -1,6 +1,6 @@
 using System;
 
-namespace JammaNalysis.CsInspections
+namespace JammaNalysis.CsFileAnalysis
 {
     [Flags]
     public enum DeclarationAccessibility

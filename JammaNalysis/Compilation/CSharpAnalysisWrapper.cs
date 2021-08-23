@@ -2,7 +2,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Build.Construction;
 
-namespace JammaNalysis
+namespace JammaNalysis.Compilation
 {
     public class CSharpAnalysisWrapper
     {
@@ -12,12 +12,6 @@ namespace JammaNalysis
         {
             return new CSharpAnalysisWrapper(filePath, analysisType);
         }
-
-        public static async Task<CSharpAnalysisWrapper> CreateAsync(string filePath, AnalysisType analysisType)
-        {
-            return await Task.Run(() => new CSharpAnalysisWrapper(filePath, analysisType));
-        }
-        
 
         private CSharpAnalysisWrapper(string path, AnalysisType analysisType)
         {

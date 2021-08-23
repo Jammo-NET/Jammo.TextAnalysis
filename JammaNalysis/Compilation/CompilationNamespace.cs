@@ -1,17 +1,41 @@
 using System.Collections.Generic;
+using System.Linq;
+using JammaNalysis.CsFileAnalysis;
 
-namespace JammaNalysis
+namespace JammaNalysis.Compilation
 {
     public class CompilationNamespace
     {
         public readonly string Name;
 
-        public readonly List<CompilationNamespaceType> Types = new();
-        public readonly List<CompilationNamespace> Namespaces = new();
+        public List<TypeDeclaration> Types;
+        public List<CompilationNamespace> Namespaces = new();
 
         public CompilationNamespace(string name)
         {
-            Name = name; // TODO: Work on navigation
+            Name = name;
+        }
+        
+        public CompilationNamespace(NamespaceDeclaration ns)
+        {
+            Name = ns.NamespaceName;
+            Types = ns.Types.ToList();
+        }
+
+        public bool Contains(CompilationNamespace other)
+        {
+            return other.Name.StartsWith(Name);
+        }
+
+        public CompilationNamespace Merge(params CompilationNamespace[] others)
+        {
+            var newComp = new CompilationNamespace("Root");
+            newComp.Namespaces.Add(this);
+            
+            foreach (var comp in others)
+                newComp.Namespaces.Add(comp);
+
+            return newComp;
         }
 
         public bool TryGetNamespace(string name, out CompilationNamespace result)

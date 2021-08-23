@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Text;
-using JammaNalysis.CsInspections;
+using JammaNalysis.CsFileAnalysis;
 using NUnit.Framework;
 
 namespace JammaNalysis_UnitTests
@@ -8,49 +8,56 @@ namespace JammaNalysis_UnitTests
     public class UsingStatementTests
     {
         [Test]
-        public void TestUsingStatementNames()
+        public void TestBaseUsingStatement()
         {
-            const string testString = 
-                "using Hello.World;" +
-                "using Hello = World;" +
-                "using static Hello = World.Type;";
+            const string testString = "using Foo;";
 
             var schema = FileSchema.Create(testString);
+            var declaration = schema.UsingStatements.First();
 
-            var expected = new[]
-            {
-                schema.UsingStatements[0].NamespaceName == "Hello.World",
-                string.IsNullOrEmpty(schema.UsingStatements[0].DeclarationName),
-                
-                schema.UsingStatements[1].NamespaceName == "World",
-                schema.UsingStatements[1].DeclarationName == "Hello",
-                
-                schema.UsingStatements[2].NamespaceName == "World.Type",
-                schema.UsingStatements[2].DeclarationName == "Hello",
-            };
-            
-            Assert.True(expected.All(b => b));
+            Assert.True(declaration.NamespaceName == "Foo" && !declaration.IsDeclaration);
         }
-
+        
         [Test]
-        public void TestUsingStatementDeclarationFlags()
+        public void TestUsingDeclaration()
         {
-            const string testString =
-                "using Hello = World;" +
-                "using static Hello = World.Type;";
-            
-            var schema = FileSchema.Create(testString);
+            const string testString = "using Foo = Bar;";
 
-            var expected = new[]
-            {
-                schema.UsingStatements[0].IsDeclaration == true,
-                schema.UsingStatements[0].IsStaticDeclaration == false,
-                
-                schema.UsingStatements[1].IsDeclaration == true,
-                schema.UsingStatements[1].IsStaticDeclaration == true,
-            };
+            var schema = FileSchema.Create(testString);
+            var declaration = schema.UsingStatements.First();
+
+            Assert.True(
+                declaration.NamespaceName == "Bar" &&
+                declaration.DeclarationName == "Foo" &&
+                declaration.IsDeclaration);
+        }
+        
+        [Test]
+        public void TestStaticUsingDeclaration()
+        {
+            const string testString = "using static Foo = Bar.Tap;";
+
+            var schema = FileSchema.Create(testString);
+            var declaration = schema.UsingStatements.First();
+
+            Assert.True(
+                declaration.NamespaceName == "Bar.Tap" &&
+                declaration.DeclarationName == "Foo" &&
+                declaration.IsDeclaration &&
+                declaration.IsStaticDeclaration);
+        }
+    }
+    
+    public class NamespaceDeclarationTests
+    {
+        [Test]
+        public void TestNamespaceDeclaration()
+        {
+            const string testString = "namespace Hello { }";
+
+            var schema = FileSchema.Create(testString);
             
-            Assert.True(expected.All(b => b));
+            Assert.True(schema.Namespaces[1].NamespaceName == "Hello");
         }
     }
 
@@ -62,21 +69,25 @@ namespace JammaNalysis_UnitTests
             const string testString = "private internal class Hello { }";
             
             var schema = FileSchema.Create(testString);
-            var type = schema.Classes.First();
+            var type = schema.GlobalNamespace.Types.First();
             
             Assert.True(type.Accessibility == (DeclarationAccessibility.Private | DeclarationAccessibility.Internal));
         }
+    }
 
+    public class MethodDeclarationTests
+    {
         [Test]
         public void TestClassMethod()
         {
-            const string testString = "private internal class Hello" +
-                                      "{" +
-                                      "    public void World() { }" +
-                                      "}";
+            const string testString = 
+                "private internal class Hello" +
+                "{" +
+                "    public void World() { }" +
+                "}";
             
             var schema = FileSchema.Create(testString);
-            var method = (MethodDeclaration)schema.Classes.First().Members.First();
+            var method = (MethodDeclaration)schema.GlobalNamespace.Types.First().Members.First();
             
             Assert.True(method.Name == "World");
         }
@@ -84,13 +95,14 @@ namespace JammaNalysis_UnitTests
         [Test]
         public void TestClassMethodModifiers()
         {
-            const string testString = "private internal class Hello" +
-                                      "{" +
-                                      "    public abstract void World() { }" +
-                                      "}";
+            const string testString = 
+                "private internal class Hello" +
+                "{" +
+                "    public abstract void World() { }" +
+                "}";
             
             var schema = FileSchema.Create(testString);
-            var method = (MethodDeclaration)schema.Classes.First().Members.First();
+            var method = (MethodDeclaration)schema.GlobalNamespace.Types.First().Members.First();
             
             Assert.True(method.Accessibility == DeclarationAccessibility.Public && method.IsAbstract);
         }

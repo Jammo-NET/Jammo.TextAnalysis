@@ -1,4 +1,4 @@
-namespace JammaNalysis.CsInspections
+namespace JammaNalysis.CsFileAnalysis
 {
     public interface IMember
     {

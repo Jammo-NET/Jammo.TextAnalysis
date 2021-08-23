@@ -1,7 +1,7 @@
-using Microsoft.CodeAnalysis;
+using JammaNalysis.Compilation;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace JammaNalysis.CsInspections
+namespace JammaNalysis.CsFileAnalysis
 {
     public abstract class Statement
     {

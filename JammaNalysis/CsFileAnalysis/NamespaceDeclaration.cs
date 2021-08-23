@@ -1,22 +1,30 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using JammaNalysis.Compilation;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace JammaNalysis.CsInspections
+namespace JammaNalysis.CsFileAnalysis
 {
     public class NamespaceDeclaration : Statement
     {
         public string NamespaceName;
-        public IMember[] Members;
+        public TypeDeclaration[] Types;
         
+        public NamespaceDeclaration(IndexSpan span) : base(span)
+        {
+            
+        }
+
         public NamespaceDeclaration(IndexSpan span, NamespaceDeclarationSyntax ns) : base(span)
         {
-            NamespaceName = ns.Name.ToString();
+            var nsMembers = ns?.Members ?? new SyntaxList<MemberDeclarationSyntax>();
+            NamespaceName = ns?.Name.ToString();
             
-            var members = new List<IMember>();
+            var members = new List<TypeDeclaration>();
 
-            foreach (var member in ns.Members)
+            foreach (var member in nsMembers)
             {
                 switch (member.Kind())
                 {
@@ -44,20 +52,10 @@ namespace JammaNalysis.CsInspections
                                 IndexSpan.FromTextSpan(member.Span), 
                                 (StructDeclarationSyntax)member));
                         break;
-                    case SyntaxKind.MethodDeclaration:
-                        members.Add(
-                            new MethodDeclaration(
-                                IndexSpan.FromTextSpan(member.Span),
-                                (MethodDeclarationSyntax)member));
-                        break;
-                    case SyntaxKind.FieldDeclaration:
-                        break;
-                    case SyntaxKind.PropertyDeclaration:
-                        break;
                 }
             }
 
-            Members = members.ToArray();
+            Types = members.ToArray();
         }
     }
 }

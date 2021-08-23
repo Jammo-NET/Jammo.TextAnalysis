@@ -1,4 +1,6 @@
-namespace JammaNalysis.CsInspections
+using JammaNalysis.Compilation;
+
+namespace JammaNalysis.CsFileAnalysis
 {
     public class Block
     {

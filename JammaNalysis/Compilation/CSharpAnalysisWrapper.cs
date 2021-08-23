@@ -51,14 +51,13 @@ namespace JammaNalysis.Compilation
 
             foreach (var project in solution.ProjectsInOrder)
                 comp = comp.Merge(MergeProject(new FileInfo(project.AbsolutePath)));
-
+            
             return comp;
         }
 
         private MergeableCompilation MergeProject(FileInfo file)
         {
             return MergeDirectory(file.Directory, SearchOption.AllDirectories); 
-            // TODO: Filter based on project config
         }
         
         private MergeableCompilation MergeDirectory(DirectoryInfo directory, SearchOption query)

@@ -3,6 +3,13 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <LangVersion>9</LangVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>JammaNalysis</Title>
+        <Description>.NET Roslyn abstractor, apart of the Jammo family.</Description>
+        <PackageLicenseUrl>https://github.com/Jammo-NET/JammaNalysis/blob/master/LICENSE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/Jammo-NET/JammaNalysis</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>syntax, analysis</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>

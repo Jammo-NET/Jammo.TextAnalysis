@@ -8,8 +8,6 @@ namespace JammaNalysis.MsBuildAnalysis
 {
     public class CsSolutionFile
     {
-        private SolutionFile file;
-
         public readonly IEnumerable<CsProjectFile> Projects;
         
         public CsSolutionFile(string path)

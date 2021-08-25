@@ -37,11 +37,40 @@ namespace JammaNalysis.Compilation
             {
                 if (root.Name == ns.Name)
                 {
-                    root.Members.AddRange(ns.Members);
+                    var found = false;
+                    
+                    foreach (var nestedNs in root.Namespaces)
+                    {
+                        if (ns == nestedNs)
+                            continue;
+                        
+                        if (ns.Name == nestedNs.Name)
+                        {
+                            nestedNs.Namespaces.Add(ns);
+                            found = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!found)
+                        root.Members.AddRange(ns.Members);
                 }
                 else if (root.Contains(ns))
                 {
-                    root.Namespaces.Add(ns);
+                    var found = false;
+
+                    foreach (var nestedNs in root.Namespaces)
+                    {
+                        if (ns.Contains(nestedNs))
+                        {
+                            nestedNs.Namespaces.Add(ns);
+                            found = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!found)
+                        root.Namespaces.Add(ns);
                 }
                 else
                 {

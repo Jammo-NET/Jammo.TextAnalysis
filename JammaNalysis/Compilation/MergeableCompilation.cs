@@ -35,10 +35,6 @@ namespace JammaNalysis.Compilation
                     schema.Namespaces
                         .Select(ns => new CompilationNamespace(ns))
                         .ToArray());
-
-                // TODO: Merge references
-                // TODO: Use GithubReader as a prototyper for this
-                // TODO: Learn ASP.NET
                     
                 Success = true;
             }

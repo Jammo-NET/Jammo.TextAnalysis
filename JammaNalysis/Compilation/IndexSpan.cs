@@ -17,10 +17,7 @@ namespace JammaNalysis.Compilation
             End = end;
         }
 
-        public static IndexSpan FromTextSpan(TextSpan span)
-        {
-            return new IndexSpan(span.Start, span.End);
-        }
+        public static implicit operator IndexSpan(TextSpan span) => new(span.Start, span.End);
 
         public IEnumerator<int> GetEnumerator()
         {

@@ -9,66 +9,22 @@ namespace JammaNalysis.CsFileAnalysis
     public abstract class TypeDeclaration : BlockStatement, IMember
     {
         public string Name { get; set; }
-        public DeclarationAccessibility Accessibility { get; set; }
+        public List<MemberModifier> Modifiers { get; set; }
         public string[] BaseTypes;
         public IMember[] Members;
-        
-        public bool IsStatic { get; set; }
-        public bool IsSealed { get; set; }
-        public bool IsAbstract { get; set; }
-        public bool IsVirtual { get; set; }
-        public bool IsOverride { get; set; }
-        public bool IsUnsafe;
-        public bool IsVolatile;
         
         public string[] Attributes { get; set; }
         
         protected TypeDeclaration(IndexSpan span, TypeDeclarationSyntax typeDeclaration) : base(span)
         {
             Name = typeDeclaration.Identifier.Text;
-
-            foreach (var modifier in typeDeclaration.Modifiers)
-            {
-                switch (modifier.Kind())
-                {
-                    case SyntaxKind.PublicKeyword:
-                        Accessibility |= DeclarationAccessibility.Public;
-                        break;
-                    case SyntaxKind.PrivateKeyword:
-                        Accessibility |= DeclarationAccessibility.Private;
-                        break;
-                    case SyntaxKind.ProtectedKeyword:
-                        Accessibility |= DeclarationAccessibility.Protected;
-                        break;
-                    case SyntaxKind.InternalKeyword:
-                        Accessibility |= DeclarationAccessibility.Internal;
-                        break;
-                    case SyntaxKind.StaticKeyword:
-                        IsStatic = true;
-                        break;
-                    case SyntaxKind.SealedKeyword:
-                        IsSealed = true;
-                        break;
-                    case SyntaxKind.AbstractKeyword:
-                        IsAbstract = true;
-                        break;
-                    case SyntaxKind.UnsafeKeyword:
-                        IsUnsafe = true;
-                        break;
-                    case SyntaxKind.VolatileKeyword:
-                        IsVolatile = true;
-                        break;
-                    case SyntaxKind.OverrideKeyword:
-                        IsOverride = true;
-                        break;
-                }
-            }
+            Modifiers = IMember.GetModifiersFromSyntaxTokens(typeDeclaration.Modifiers);
 
             var members = new List<IMember>();
 
             foreach (var member in typeDeclaration.Members)
             {
-                var memberSpan = IndexSpan.FromTextSpan(member.Span);
+                var memberSpan = (IndexSpan)member.Span;
                 
                 switch (member.Kind())
                 {

@@ -7,10 +7,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace JammaNalysis.CsFileAnalysis
 {
-    public class NamespaceDeclaration : Statement
+    public class NamespaceDeclaration : Statement, IMember
     {
-        public string NamespaceName;
-        public TypeDeclaration[] Types;
+        public string Name { get; set; }
+        public List<MemberModifier> Modifiers { get; set; }
+        public IMember[] Members;
         
         public NamespaceDeclaration(IndexSpan span) : base(span)
         {
@@ -20,42 +21,40 @@ namespace JammaNalysis.CsFileAnalysis
         public NamespaceDeclaration(IndexSpan span, NamespaceDeclarationSyntax ns) : base(span)
         {
             var nsMembers = ns?.Members ?? new SyntaxList<MemberDeclarationSyntax>();
-            NamespaceName = ns?.Name.ToString();
+            Name = ns?.Name.ToString();
             
-            var members = new List<TypeDeclaration>();
+            var members = new List<IMember>();
 
             foreach (var member in nsMembers)
             {
                 switch (member.Kind())
                 {
+                    case SyntaxKind.NamespaceDeclaration:
+                    {
+                        members.Add(
+                            new NamespaceDeclaration(member.Span, (NamespaceDeclarationSyntax)member));
+                        break;
+                    }
                     case SyntaxKind.ClassDeclaration:
                         members.Add(
-                            new ClassDeclaration(
-                                IndexSpan.FromTextSpan(member.Span), 
-                                (ClassDeclarationSyntax)member));
+                            new ClassDeclaration(member.Span, (ClassDeclarationSyntax)member));
                         break;
                     case SyntaxKind.InterfaceDeclaration:
                         members.Add(
-                            new InterfaceDeclaration(
-                                IndexSpan.FromTextSpan(member.Span), 
-                                (InterfaceDeclarationSyntax)member));
+                            new InterfaceDeclaration(member.Span, (InterfaceDeclarationSyntax)member));
                         break;
                     case SyntaxKind.RecordDeclaration:
                         members.Add(
-                            new RecordDeclaration(
-                                IndexSpan.FromTextSpan(member.Span), 
-                                (RecordDeclarationSyntax)member));
+                            new RecordDeclaration(member.Span, (RecordDeclarationSyntax)member));
                         break;
                     case SyntaxKind.StructDeclaration:
                         members.Add(
-                            new StructDeclaration(
-                                IndexSpan.FromTextSpan(member.Span), 
-                                (StructDeclarationSyntax)member));
+                            new StructDeclaration(member.Span, (StructDeclarationSyntax)member));
                         break;
                 }
             }
 
-            Types = members.ToArray();
+            Members = members.ToArray();
         }
     }
 }

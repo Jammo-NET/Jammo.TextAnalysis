@@ -1,5 +1,6 @@
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using JammaNalysis.CsFileAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -20,8 +21,7 @@ namespace JammaNalysis.Compilation
             Success = true;
         }
         
-        //public MergeableCompilation(FileInfo file, params DisassembledFile[] references)
-        public MergeableCompilation(FileInfo file)
+        public MergeableCompilation(FileInfo file, params Assembly[] references)
         {
             Info = file;
             Info.Refresh();
@@ -31,17 +31,15 @@ namespace JammaNalysis.Compilation
                 using var fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 var schema = FileSchema.Create(fileStream);
                 
-                GlobalNamespace = new CompilationNamespace(schema.GlobalNamespace);
+                GlobalNamespace = new CompilationNamespace(schema.GlobalNamespace.Name).Merge(
+                    schema.Namespaces
+                        .Select(ns => new CompilationNamespace(ns))
+                        .ToArray());
 
-                foreach (var ns in schema.Namespaces
-                    .Where(n => n != schema.GlobalNamespace))
-                {
-                    GlobalNamespace.Merge(new CompilationNamespace(ns));
-                }
-                
-                //GlobalNamespace.Merge(
-                    //Merge(references.Select(r => new MergeableCompilation(r.Info)).ToArray()).GlobalNamespace);
-
+                // TODO: Merge references
+                // TODO: Use GithubReader as a prototyper for this
+                // TODO: Learn ASP.NET
+                    
                 Success = true;
             }
             catch (IOException)
@@ -54,7 +52,7 @@ namespace JammaNalysis.Compilation
         {
             if (others.Length == 0)
                 return this;
-            // TODO: Do an actual merge instead of appending to a root
+            
             var compNamespace = new CompilationNamespace("Root");
             compNamespace.Namespaces.Add(GlobalNamespace);
             

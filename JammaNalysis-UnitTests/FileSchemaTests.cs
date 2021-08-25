@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Text;
+using JammaNalysis;
 using JammaNalysis.CsFileAnalysis;
 using NUnit.Framework;
 
@@ -57,7 +58,7 @@ namespace JammaNalysis_UnitTests
 
             var schema = FileSchema.Create(testString);
             
-            Assert.True(schema.Namespaces[1].NamespaceName == "Hello");
+            Assert.True(schema.Namespaces[1].Name == "Hello");
         }
     }
 
@@ -69,9 +70,10 @@ namespace JammaNalysis_UnitTests
             const string testString = "private internal class Hello { }";
             
             var schema = FileSchema.Create(testString);
-            var type = schema.GlobalNamespace.Types.First();
+            var type = schema.GlobalNamespace.Members.First();
             
-            Assert.True(type.Accessibility == (DeclarationAccessibility.Private | DeclarationAccessibility.Internal));
+            Assert.True(type.Modifiers.TryGetModifier(DeclarationModifier.Private, out _) &&
+                        type.Modifiers.TryGetModifier(DeclarationModifier.Internal, out _));
         }
     }
 
@@ -87,7 +89,7 @@ namespace JammaNalysis_UnitTests
                 "}";
             
             var schema = FileSchema.Create(testString);
-            var method = (MethodDeclaration)schema.GlobalNamespace.Types.First().Members.First();
+            var method = (MethodDeclaration)((TypeDeclaration)schema.GlobalNamespace.Members.First()).Members.First();
             
             Assert.True(method.Name == "World");
         }
@@ -102,9 +104,10 @@ namespace JammaNalysis_UnitTests
                 "}";
             
             var schema = FileSchema.Create(testString);
-            var method = (MethodDeclaration)schema.GlobalNamespace.Types.First().Members.First();
+            var method = (MethodDeclaration)((TypeDeclaration)schema.GlobalNamespace.Members.First()).Members.First();
             
-            Assert.True(method.Accessibility == DeclarationAccessibility.Public && method.IsAbstract);
+            Assert.True(method.Modifiers.TryGetModifier(DeclarationModifier.Public, out _) &&
+                        method.Modifiers.TryGetModifier(DeclarationModifier.Abstract, out _));
         }
     }
 }

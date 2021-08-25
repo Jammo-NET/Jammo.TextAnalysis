@@ -27,10 +27,9 @@ namespace JammaNalysis.CsFileAnalysis
             
             var root = result.GetCompilationUnitRoot();
 
-            schema.UsingStatements = root.Usings.Select(statement =>
-                new UsingStatement(
-                    IndexSpan.FromTextSpan(statement.Span),
-                    statement)).ToArray();
+            schema.UsingStatements = root.Usings
+                .Select(statement => new UsingStatement(statement.Span, statement))
+                .ToArray();
 
             var namespaces = new List<NamespaceDeclaration>();
             var types = new List<ClassDeclaration>();
@@ -43,17 +42,17 @@ namespace JammaNalysis.CsFileAnalysis
                 {
                     case NamespaceDeclarationSyntax ns:
                         namespaces.Add(
-                            new NamespaceDeclaration(IndexSpan.FromTextSpan(ns.Span), ns));
+                            new NamespaceDeclaration(ns.Span, ns));
                         break;
                     case ClassDeclarationSyntax classType:
                         types.Add(
-                            new ClassDeclaration(IndexSpan.FromTextSpan(classType.Span), classType));
+                            new ClassDeclaration(classType.Span, classType));
                         break;
                 }
             }
 
             schema.Namespaces = namespaces.ToArray();
-            schema.GlobalNamespace.Types = types.Cast<TypeDeclaration>().ToArray();
+            schema.GlobalNamespace.Members = types.Cast<TypeDeclaration>().ToArray();
 
             return schema;
         }

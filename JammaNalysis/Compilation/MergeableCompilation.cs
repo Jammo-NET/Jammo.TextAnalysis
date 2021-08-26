@@ -30,7 +30,8 @@ namespace JammaNalysis.Compilation
                 var schema = FileSchema.Create(fileStream);
                 
                 GlobalNamespace = new CompilationNamespace(schema.GlobalNamespace.Name).Merge(
-                    schema.Namespaces
+                    schema.GlobalNamespace.Members
+                        .OfType<NamespaceDeclaration>()
                         .Select(ns => new CompilationNamespace(ns))
                         .ToArray());
                     

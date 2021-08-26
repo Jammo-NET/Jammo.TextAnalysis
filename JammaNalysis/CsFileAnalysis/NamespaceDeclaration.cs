@@ -9,7 +9,7 @@ namespace JammaNalysis.CsFileAnalysis
 {
     public class NamespaceDeclaration : Statement, IMember
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
         public List<MemberModifier> Modifiers { get; set; }
         public IMember[] Members;
         
@@ -21,7 +21,7 @@ namespace JammaNalysis.CsFileAnalysis
         public NamespaceDeclaration(IndexSpan span, NamespaceDeclarationSyntax ns) : base(span)
         {
             var nsMembers = ns?.Members ?? new SyntaxList<MemberDeclarationSyntax>();
-            Name = ns?.Name.ToString();
+            Name = ns.Name.ToString();
             
             var members = new List<IMember>();
 

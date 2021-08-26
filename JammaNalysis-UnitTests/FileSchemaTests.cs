@@ -1,6 +1,8 @@
+using System.IO;
 using System.Linq;
 using System.Text;
 using JammaNalysis;
+using JammaNalysis.Compilation;
 using JammaNalysis.CsFileAnalysis;
 using NUnit.Framework;
 
@@ -58,7 +60,7 @@ namespace JammaNalysis_UnitTests
 
             var schema = FileSchema.Create(testString);
             
-            Assert.True(schema.Namespaces[1].Name == "Hello");
+            Assert.True(schema.GlobalNamespace.Members.First().Name == "Hello");
         }
     }
 
@@ -67,6 +69,9 @@ namespace JammaNalysis_UnitTests
         [Test]
         public void TestClassAccessibilityModifiers()
         {
+            new MergeableCompilation(
+                new FileInfo(@"C:\Users\zande\Code\C#\Jammo\JammaNalysis\JammaNalysis\Extensions.cs"));
+            
             const string testString = "private internal class Hello { }";
             
             var schema = FileSchema.Create(testString);

@@ -10,8 +10,7 @@ namespace JammaNalysis.CsFileAnalysis
     public class FileSchema
     {
         public UsingStatement[] UsingStatements;
-        public NamespaceDeclaration[] Namespaces;
-        public NamespaceDeclaration GlobalNamespace => Namespaces.FirstOrDefault();
+        public NamespaceDeclaration GlobalNamespace;
 
         public static FileSchema Create(FileStream file)
         {
@@ -31,28 +30,27 @@ namespace JammaNalysis.CsFileAnalysis
                 .Select(statement => new UsingStatement(statement.Span, statement))
                 .ToArray();
 
-            var namespaces = new List<NamespaceDeclaration>();
-            var types = new List<ClassDeclaration>();
-            
-            namespaces.Add(new NamespaceDeclaration(new IndexSpan(0, 0)));
+            var members = new List<IMember>();
 
             foreach (var member in root.Members)
             {
                 switch (member)
                 {
                     case NamespaceDeclarationSyntax ns:
-                        namespaces.Add(
+                        members.Add(
                             new NamespaceDeclaration(ns.Span, ns));
                         break;
                     case ClassDeclarationSyntax classType:
-                        types.Add(
+                        members.Add(
                             new ClassDeclaration(classType.Span, classType));
                         break;
                 }
             }
 
-            schema.Namespaces = namespaces.ToArray();
-            schema.GlobalNamespace.Members = types.Cast<TypeDeclaration>().ToArray();
+            schema.GlobalNamespace = new NamespaceDeclaration(new IndexSpan(0, 0))
+            {
+                Members = members.ToArray()
+            };
 
             return schema;
         }

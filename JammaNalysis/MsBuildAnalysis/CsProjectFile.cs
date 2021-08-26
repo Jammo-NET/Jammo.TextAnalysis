@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace JammaNalysis.MsBuildAnalysis
         private const string PropertyGroupName = "PropertyGroup";
 
         public readonly string FilePath;
-        public IEnumerable<FileSystemInfo> Files;
+        public ProjectFileSystem FileSystem;
         public readonly XDocument ProjectHead;
         
         public IEnumerable<XElement> ItemGroups => ProjectHead.Root
@@ -68,6 +69,8 @@ namespace JammaNalysis.MsBuildAnalysis
                     system.TopLevel.TraverseRelativePath(removeAttribute.Value);
                 } // TODO: Come back to this crap
             }
+
+            FileSystem = system;
         }
 
         private ProjectDirectory ReadDirectory(DirectoryInfo info)
@@ -86,7 +89,7 @@ namespace JammaNalysis.MsBuildAnalysis
         }
     }
 
-    public class ProjectFileSystem
+    public class ProjectFileSystem : IEnumerable<IProjectFileSystemEntry>
     {
         public readonly ProjectDirectory TopLevel;
 
@@ -94,9 +97,22 @@ namespace JammaNalysis.MsBuildAnalysis
         {
             TopLevel = directory;
         }
+
+        public IEnumerator<IProjectFileSystemEntry> GetEnumerator()
+        {
+            yield return TopLevel;
+
+            foreach (var child in TopLevel)
+                yield return child;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 
-    public interface IProjectFileSystemEntry
+    public interface IProjectFileSystemEntry : IEnumerable<IProjectFileSystemEntry>
     {
         public FileSystemInfo Info { get; }
     }
@@ -141,6 +157,22 @@ namespace JammaNalysis.MsBuildAnalysis
 
             return null;
         }
+
+        public IEnumerator<IProjectFileSystemEntry> GetEnumerator()
+        {
+            foreach (var child in Children)
+            {
+                yield return child;
+
+                foreach (var nested in child)
+                    yield return nested;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 
     public class ProjectFile : IProjectFileSystemEntry
@@ -151,6 +183,16 @@ namespace JammaNalysis.MsBuildAnalysis
         internal ProjectFile(FileInfo info)
         {
             Info = info;
+        }
+
+        public IEnumerator<IProjectFileSystemEntry> GetEnumerator()
+        {
+            yield break;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

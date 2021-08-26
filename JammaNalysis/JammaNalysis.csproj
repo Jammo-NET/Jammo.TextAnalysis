@@ -10,8 +10,8 @@
         <RepositoryUrl>https://github.com/Jammo-NET/JammaNalysis</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>syntax, analysis</PackageTags>
-        <PackageVersion>1.0.2</PackageVersion>
-        <PackageReleaseNotes>Fix an error where named compilation namespaces don't define a Members list</PackageReleaseNotes>
+        <PackageVersion>1.0.3</PackageVersion>
+        <PackageReleaseNotes>Fixed some null reference errors when using names</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>

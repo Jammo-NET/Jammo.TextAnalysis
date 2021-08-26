@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -13,7 +14,7 @@ namespace JammaNalysis.Compilation
         public readonly bool Success;
 
         public readonly CompilationNamespace GlobalNamespace;
-        public readonly FileInfo Info;
+        public FileInfo[] Files { get; set; } = Array.Empty<FileInfo>();
 
         public MergeableCompilation(CompilationNamespace ns)
         {
@@ -21,11 +22,8 @@ namespace JammaNalysis.Compilation
             Success = true;
         }
         
-        public MergeableCompilation(FileInfo file, params Assembly[] references)
+        public MergeableCompilation(FileInfo file)
         {
-            Info = file;
-            Info.Refresh();
-
             try
             {
                 using var fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
@@ -37,6 +35,7 @@ namespace JammaNalysis.Compilation
                         .ToArray());
                     
                 Success = true;
+                Files = Files.Concat(new[] { file }).ToArray();
             }
             catch (IOException)
             {
@@ -51,10 +50,16 @@ namespace JammaNalysis.Compilation
             
             var compNamespace = new CompilationNamespace("Root");
             compNamespace.Namespaces.Add(GlobalNamespace);
-            
+
             foreach (var comp in others)
                 compNamespace.Namespaces.Add(comp.GlobalNamespace);
 
+            var compilation = new MergeableCompilation(compNamespace);
+            compilation.Files = compilation.Files
+                .Concat(others.Select(o => o.Files).SelectMany(i => i))
+                .Concat(Files)
+                .ToArray();
+                
             return new MergeableCompilation(compNamespace);
         }
     }

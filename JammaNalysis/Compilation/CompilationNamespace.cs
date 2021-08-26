@@ -15,6 +15,7 @@ namespace JammaNalysis.Compilation
         public CompilationNamespace(string name)
         {
             Name = name;
+            Members = new List<IMember>();
         }
         
         public CompilationNamespace(NamespaceDeclaration ns)

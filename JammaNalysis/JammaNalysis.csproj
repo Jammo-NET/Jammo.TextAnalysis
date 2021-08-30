@@ -10,7 +10,7 @@
         <RepositoryUrl>https://github.com/Jammo-NET/JammaNalysis</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>syntax, analysis</PackageTags>
-        <PackageVersion>1.0.3</PackageVersion>
+        <PackageVersion>1.0.4</PackageVersion>
         <PackageReleaseNotes>Fixed some null reference errors when using names</PackageReleaseNotes>
     </PropertyGroup>
 

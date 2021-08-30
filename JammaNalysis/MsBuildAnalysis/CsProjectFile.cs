@@ -89,7 +89,7 @@ namespace JammaNalysis.MsBuildAnalysis
         }
     }
 
-    public class ProjectFileSystem : IEnumerable<IProjectFileSystemEntry>
+    public class ProjectFileSystem
     {
         public readonly ProjectDirectory TopLevel;
 
@@ -98,101 +98,27 @@ namespace JammaNalysis.MsBuildAnalysis
             TopLevel = directory;
         }
 
-        public IEnumerator<IProjectFileSystemEntry> GetEnumerator()
+        public IEnumerator<IProjectFileSystemEntry> EnumerateTree()
         {
             yield return TopLevel;
 
-            foreach (var child in TopLevel)
-                yield return child;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-    }
-
-    public interface IProjectFileSystemEntry : IEnumerable<IProjectFileSystemEntry>
-    {
-        public FileSystemInfo Info { get; }
-    }
-
-    public class ProjectDirectory : IProjectFileSystemEntry
-    {
-        public FileSystemInfo Info { get; private set; }
-        public readonly List<IProjectFileSystemEntry> Children = new();
-
-        internal ProjectDirectory(DirectoryInfo info)
-        {
-            Info = info;
-        }
-
-        public IProjectFileSystemEntry TraverseRelativePath(string path)
-        {
-            path = path.Replace("\\", "/");
-            
-            return TraverseRelativePath(path.Split("/"));
-        }
-
-        private IProjectFileSystemEntry TraverseRelativePath(string[] path)
-        {
-            var current = path.FirstOrDefault();
-
-            if (current is null)
-                return null;
-            
-            foreach (var entry in Children)
-            {
-                if (current.StartsWith(entry.Info.Name))
-                {
-                    if (current == entry.Info.Name)
-                        return entry;
-
-                    if (entry is ProjectDirectory projectDirectory)
-                    {
-                        return projectDirectory.TraverseRelativePath(path.Skip(1).ToArray());
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        public IEnumerator<IProjectFileSystemEntry> GetEnumerator()
-        {
-            foreach (var child in Children)
+            foreach (var child in TopLevel.EnumerateTree())
             {
                 yield return child;
 
-                foreach (var nested in child)
+                foreach (var nested in child.EnumerateTree())
                     yield return nested;
             }
         }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-    }
-
-    public class ProjectFile : IProjectFileSystemEntry
-    {
-        public FileSystemInfo Info { get; private set; }
-        public readonly List<IProjectFileSystemEntry> DependantFiles = new();
-
-        internal ProjectFile(FileInfo info)
-        {
-            Info = info;
-        }
-
-        public IEnumerator<IProjectFileSystemEntry> GetEnumerator()
+        
+        public IEnumerable<ProjectFile> EnumerateFiles()
         {
             yield break;
         }
-
-        IEnumerator IEnumerable.GetEnumerator()
+        
+        public IEnumerator<ProjectDirectory> EnumerateDirectories()
         {
-            return GetEnumerator();
+            yield return TopLevel;
         }
     }
 }

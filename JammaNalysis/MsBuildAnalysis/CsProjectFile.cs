@@ -98,7 +98,7 @@ namespace JammaNalysis.MsBuildAnalysis
             TopLevel = directory;
         }
 
-        public IEnumerator<IProjectFileSystemEntry> EnumerateTree()
+        public IEnumerable<IProjectFileSystemEntry> EnumerateTree()
         {
             yield return TopLevel;
 
@@ -116,7 +116,7 @@ namespace JammaNalysis.MsBuildAnalysis
             yield break;
         }
         
-        public IEnumerator<ProjectDirectory> EnumerateDirectories()
+        public IEnumerable<ProjectDirectory> EnumerateDirectories()
         {
             yield return TopLevel;
         }

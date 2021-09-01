@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using JammaNalysis.Compilation;
+using Jammo.CsAnalysis.Compilation;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace JammaNalysis.CsFileAnalysis
+namespace Jammo.CsAnalysis.CsFileAnalysis
 {
     public class NamespaceDeclaration : Statement, IMember
     {

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace JammaNalysis.CsFileAnalysis
+namespace Jammo.CsAnalysis.CsFileAnalysis
 {
     public interface IMember
     {

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using JammaNalysis.Compilation;
+using Jammo.CsAnalysis.Compilation;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace JammaNalysis.CsFileAnalysis
+namespace Jammo.CsAnalysis.CsFileAnalysis
 {
     public class FileSchema
     {

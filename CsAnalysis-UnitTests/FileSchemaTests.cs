@@ -1,9 +1,9 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using JammaNalysis;
-using JammaNalysis.Compilation;
-using JammaNalysis.CsFileAnalysis;
+using Jammo.CsAnalysis;
+using Jammo.CsAnalysis.Compilation;
+using Jammo.CsAnalysis.CsFileAnalysis;
 using NUnit.Framework;
 
 namespace JammaNalysis_UnitTests
@@ -70,7 +70,7 @@ namespace JammaNalysis_UnitTests
         public void TestClassAccessibilityModifiers()
         {
             new MergeableCompilation(
-                new FileInfo(@"C:\Users\zande\Code\C#\Jammo\JammaNalysis\JammaNalysis\Extensions.cs"));
+                new FileInfo(@"C:\Users\zande\Code\C#\Jammo\Jammo.CsAnalysis\Jammo.CsAnalysis\Extensions.cs"));
             
             const string testString = "private internal class Hello { }";
             

@@ -2,12 +2,12 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using JammaNalysis.CsFileAnalysis;
+using Jammo.CsAnalysis.CsFileAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace JammaNalysis.Compilation
+namespace Jammo.CsAnalysis.Compilation
 {
     public class MergeableCompilation
     {

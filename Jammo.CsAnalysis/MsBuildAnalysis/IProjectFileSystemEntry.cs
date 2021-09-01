@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace JammaNalysis.MsBuildAnalysis
+namespace Jammo.CsAnalysis.MsBuildAnalysis
 {
     public interface IProjectFileSystemEntry
     {

@@ -2,7 +2,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Build.Construction;
 
-namespace JammaNalysis.Compilation
+namespace Jammo.CsAnalysis.Compilation
 {
     public class CSharpAnalysisWrapper
     {

@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.Build.Construction;
 
-namespace JammaNalysis.MsBuildAnalysis
+namespace Jammo.CsAnalysis.MsBuildAnalysis
 {
     public class CsSolutionFile
     {

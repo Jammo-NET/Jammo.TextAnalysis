@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using JammaNalysis.CsFileAnalysis;
+using Jammo.CsAnalysis.CsFileAnalysis;
 
-namespace JammaNalysis
+namespace Jammo.CsAnalysis
 {
     public static class Extensions
     {

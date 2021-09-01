@@ -1,6 +1,6 @@
-using JammaNalysis.Compilation;
+using Jammo.CsAnalysis.Compilation;
 
-namespace JammaNalysis.CsFileAnalysis
+namespace Jammo.CsAnalysis.CsFileAnalysis
 {
     public class MemberModifier
     {

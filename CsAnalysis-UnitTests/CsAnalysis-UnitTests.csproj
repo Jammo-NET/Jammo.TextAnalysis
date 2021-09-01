@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\JammaNalysis\JammaNalysis.csproj" />
+      <ProjectReference Include="..\Jammo.CsAnalysis\Jammo.CsAnalysis.csproj" />
     </ItemGroup>
 
 </Project>

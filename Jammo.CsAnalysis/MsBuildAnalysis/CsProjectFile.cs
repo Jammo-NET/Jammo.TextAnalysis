@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace JammaNalysis.MsBuildAnalysis
+namespace Jammo.CsAnalysis.MsBuildAnalysis
 {
     public class CsProjectFile
     {

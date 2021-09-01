@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.Text;
 
-namespace JammaNalysis.Compilation
+namespace Jammo.CsAnalysis.Compilation
 {
     public readonly struct IndexSpan : IEnumerable<int>
     {

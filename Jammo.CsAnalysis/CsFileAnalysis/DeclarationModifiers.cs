@@ -1,6 +1,6 @@
 using System;
 
-namespace JammaNalysis.CsFileAnalysis
+namespace Jammo.CsAnalysis.CsFileAnalysis
 {
     public enum DeclarationModifier
     {

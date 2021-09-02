@@ -27,7 +27,9 @@ namespace Jammo.CsAnalysis.Compilation
             try
             {
                 using var fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                var schema = FileSchema.Create(fileStream);
+                using var reader = new StreamReader(fileStream);
+                
+                var schema = FileSchema.Create(reader.ReadToEndAsync().Result);
                 
                 GlobalNamespace = new CompilationNamespace(schema.GlobalNamespace.Name).Merge(
                     schema.GlobalNamespace.Members

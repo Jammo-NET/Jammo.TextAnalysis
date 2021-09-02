@@ -12,13 +12,6 @@ namespace Jammo.CsAnalysis.CsFileAnalysis
         public UsingStatement[] UsingStatements;
         public NamespaceDeclaration GlobalNamespace;
 
-        public static FileSchema Create(FileStream file)
-        {
-            var reader = new StreamReader(file);
-            
-            return Create(reader.ReadToEndAsync().Result);
-        }
-
         public static FileSchema Create(string text)
         {
             var schema = new FileSchema();

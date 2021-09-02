@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -27,6 +28,8 @@ namespace Jammo.CsAnalysis.Helpers
         {
             private readonly List<SyntaxMatch> matches = new();
             public IEnumerable<SyntaxMatch> Matches => matches;
+            
+            public SpecialWalker() : base(SyntaxWalkerDepth.Token) { }
 
             public override void VisitToken(SyntaxToken token)
             {

@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 namespace JammaNalysis_UnitTests
 {
+    [TestFixture]
     public class UsingStatementTests
     {
         [Test]
@@ -69,9 +70,6 @@ namespace JammaNalysis_UnitTests
         [Test]
         public void TestClassAccessibilityModifiers()
         {
-            new MergeableCompilation(
-                new FileInfo(@"C:\Users\zande\Code\C#\Jammo\Jammo.CsAnalysis\Jammo.CsAnalysis\Extensions.cs"));
-            
             const string testString = "private internal class Hello { }";
             
             var schema = FileSchema.Create(testString);

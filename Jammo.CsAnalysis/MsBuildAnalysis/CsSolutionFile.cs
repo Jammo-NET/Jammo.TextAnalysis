@@ -8,11 +8,14 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
 {
     public class CsSolutionFile
     {
-        public readonly IEnumerable<CsProjectFile> Projects;
+        private FileInfo info;
+
+        public readonly FormatVersion Version;
+        public IEnumerable<CsProjectFile> Projects { get; }
         
         public CsSolutionFile(string path)
         {
-            var info = new FileInfo(path);
+            info = new FileInfo(path);
 
             if (!info.Exists)
                 throw new ArgumentException($"File '{info.Name}' does not exist.");
@@ -23,5 +26,20 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
             Projects = SolutionFile.Parse(path).ProjectsInOrder
                 .Select(p => new CsProjectFile(p.AbsolutePath));
         }
+
+        public void AddProject(CsProjectFile project)
+        {
+            
+        }
+        
+        public void RemoveProject(CsProjectFile project)
+        {
+            
+        }
+    }
+
+    public class SlnFileData
+    {
+        public FormatVersion FormattedVersion;
     }
 }

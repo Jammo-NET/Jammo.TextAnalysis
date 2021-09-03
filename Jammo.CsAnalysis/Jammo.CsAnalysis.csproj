@@ -4,19 +4,26 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <LangVersion>9</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Title>JammaNalysis</Title>
+        <Title>Jammo.CsAnalysis</Title>
         <Description>.NET Roslyn abstractor, apart of the Jammo family.</Description>
-        <PackageLicenseUrl>https://github.com/Jammo-NET/JammaNalysis/blob/master/LICENSE</PackageLicenseUrl>
-        <RepositoryUrl>https://github.com/Jammo-NET/JammaNalysis</RepositoryUrl>
+        <PackageLicenseUrl>https://github.com/Jammo-NET/Jammo.CsAnalysis/blob/master/LICENSE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/Jammo-NET/Jammo.CsAnalysis</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>syntax, analysis</PackageTags>
-        <PackageVersion>1.0.6</PackageVersion>
+        <PackageVersion>1.0.0</PackageVersion>
         <PackageReleaseNotes>Fixed some null reference errors when using names</PackageReleaseNotes>
+        <Authors>zeplar exe</Authors>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.Build" Version="16.11.0" />
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.11.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="MsBuildAnalysis\SlnParser.Tokenizer.cs">
+        <DependentUpon>SlnParser.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>

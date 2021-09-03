@@ -1,8 +1,5 @@
-using System.IO;
 using System.Linq;
-using System.Text;
 using Jammo.CsAnalysis;
-using Jammo.CsAnalysis.Compilation;
 using Jammo.CsAnalysis.CsFileAnalysis;
 using NUnit.Framework;
 

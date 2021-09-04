@@ -12,7 +12,6 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
         {
             var stream = new SolutionStream();
             var stateQueue = new List<ParserState>();
-            var previousData = new List<SolutionData>();
 
             stateQueue.Insert(0, ParserState.Any);
 
@@ -67,8 +66,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
                         } while ((versionToken = tokenizer.Next()) != null);
 
                         stream.Version = new FormatVersion(versionNum.ToString());
-
-                        previousData.Add(stream.Version);
+                        
                         stateQueue.Remove(stateQueue.First());
 
                         break;
@@ -123,7 +121,6 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
                             }
                         } while ((projectDefToken = tokenizer.Next()) != null);
 
-                        previousData.Add(projectDef);
                         stream.AddProject(projectDef);
 
                         break;

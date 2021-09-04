@@ -16,7 +16,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
     
     public class ProjectDirectory : IProjectFileSystemEntry
     {
-        public FileSystemInfo Info { get; private set; }
+        public FileSystemInfo Info { get; }
 
         public readonly List<IProjectFileSystemEntry> Children = new();
 
@@ -80,14 +80,16 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
 
     public class ProjectFile : IProjectFileSystemEntry
     {
-        public FileSystemInfo Info { get; private set; }
+        public FileSystemInfo Info { get; }
+        public readonly ProjectDirectory Directory;
 
         internal readonly List<IProjectFileSystemEntry> dependantFiles = new();
         public IEnumerable<IProjectFileSystemEntry> DependantFiles => dependantFiles;
 
-        internal ProjectFile(FileInfo info)
+        internal ProjectFile(FileInfo info, ProjectDirectory directory)
         {
             Info = info;
+            Directory = directory;
         }
         
         public IEnumerable<IProjectFileSystemEntry> EnumerateTree()

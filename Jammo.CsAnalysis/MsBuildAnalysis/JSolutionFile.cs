@@ -7,30 +7,39 @@ using Microsoft.Build.Construction;
 
 namespace Jammo.CsAnalysis.MsBuildAnalysis
 {
-    public class JSolutionFile
+    public class JSolutionFile : IDisposable
     {
-        private FileInfo info;
+        private readonly FileInfo info;
 
-        public readonly FormatVersion Version;
-        public IEnumerable<CsProjectFile> Projects { get; }
+        public readonly SolutionStream Stream;
+        public IEnumerable<JProjectFile> ProjectFiles { get; private set; }
         
         public JSolutionFile(string path)
         {
             info = new FileInfo(path);
-
+            
             if (!info.Exists)
                 throw new ArgumentException($"File '{info.Name}' does not exist.");
 
             if (info.Extension != ".sln")
                 throw new ArgumentException("Expected a .sln file.");
-
-            Projects = SolutionFile.Parse(path).ProjectsInOrder
-                .Select(p => new CsProjectFile(p.AbsolutePath));
+            
+            Stream = new SolutionStream(info.Open(FileMode.Open, FileAccess.Read, FileShare.Read));
+            
+            UpdateProjects();
         }
-    }
 
-    public class SlnFileData
-    {
-        public FormatVersion FormattedVersion;
+        public void UpdateProjects()
+        {
+            Stream.Parse();
+            
+            ProjectFiles = Stream.Projects
+                .Select(p => new JProjectFile(Path.Join(info.FullName, p.RelativePath)));
+        }
+
+        public void Dispose()
+        {
+            Stream.Dispose();
+        }
     }
 }

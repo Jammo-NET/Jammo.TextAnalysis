@@ -3,26 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 
-namespace Jammo.CsAnalysis.MsBuildAnalysis
+namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
 {
-    public static partial class SlnParser 
+    public static partial class SolutionParser 
     { 
-        private class Tokenizer : IEnumerable<BasicToken>
+        internal class Tokenizer : IEnumerable<BasicToken>
         {
             private readonly string text;
+            private TokenizerOptions options;
 
             public int Index { get; private set; }
 
-            public Tokenizer(string input)
+            public Tokenizer(string input, TokenizerOptions options)
             {
                 text = input;
+                this.options = options;
             }
 
-            public static IEnumerable<BasicToken> Tokenize(string input)
+            public static IEnumerable<BasicToken> Tokenize(string input, TokenizerOptions options)
             {
                 var tokens = new List<BasicToken>();
-                var tokenizer = new Tokenizer(input);
+                var tokenizer = new Tokenizer(input, options);
                 
                 BasicToken token;
                 while ((token = tokenizer.Next()) != null)
@@ -96,12 +99,26 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
                     }
                     else
                     {
+                        if (options.Ignorable.Contains(currentTokenType))
+                        {
+                            Index += currentRead.Last();
+                            
+                            return PeekNext();
+                        }
+
                         return new BasicToken(currentRead, currentTokenType, new IndexSpan(Index, charIndex));
                     }
                 }
 
                 if (string.IsNullOrEmpty(currentRead))
                     return null;
+                
+                if (options.Ignorable.Contains(currentTokenType))
+                {
+                    Index += currentRead.Last();
+                            
+                    return PeekNext();
+                }
                 
                 return new BasicToken(currentRead, currentTokenType, new IndexSpan(Index, text.Length - 1));
             }
@@ -127,7 +144,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
             }
         }
 
-        private class BasicToken
+        internal class BasicToken
         {
             public readonly string Text;
             public readonly BasicTokenType Type;
@@ -145,8 +162,18 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
                 return Text;
             }
         }
+        
+        internal class TokenizerOptions
+        {
+            public readonly BasicTokenType[] Ignorable;
 
-        private enum BasicTokenType
+            public TokenizerOptions(params BasicTokenType[] ignorable)
+            {
+                Ignorable = ignorable;
+            }
+        }
+    
+        internal enum BasicTokenType
         {
             Unhandled = 0,
             

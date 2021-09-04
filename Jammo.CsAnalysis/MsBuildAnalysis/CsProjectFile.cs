@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Microsoft.Build.Construction;
 
 namespace Jammo.CsAnalysis.MsBuildAnalysis
 {
@@ -48,7 +49,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
 
             FilePath = path;
             ProjectHead = document;
-
+            
             var filePathAttributes = new[] { "Include", "Update", "Remove" };
             
             var specialItems = ItemGroups

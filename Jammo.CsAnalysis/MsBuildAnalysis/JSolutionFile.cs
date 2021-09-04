@@ -2,18 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Jammo.CsAnalysis.MsBuildAnalysis.Solutions;
 using Microsoft.Build.Construction;
 
 namespace Jammo.CsAnalysis.MsBuildAnalysis
 {
-    public class CsSolutionFile
+    public class JSolutionFile
     {
         private FileInfo info;
 
         public readonly FormatVersion Version;
         public IEnumerable<CsProjectFile> Projects { get; }
         
-        public CsSolutionFile(string path)
+        public JSolutionFile(string path)
         {
             info = new FileInfo(path);
 

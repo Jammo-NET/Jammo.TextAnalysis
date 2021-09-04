@@ -21,8 +21,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="MsBuildAnalysis\SlnParser.Tokenizer.cs">
-        <DependentUpon>SlnParser.cs</DependentUpon>
+      <Compile Update="MsBuildAnalysis\Solutions\SolutionParser.Tokenizer.cs">
+        <DependentUpon>SolutionParser.cs</DependentUpon>
       </Compile>
     </ItemGroup>
 

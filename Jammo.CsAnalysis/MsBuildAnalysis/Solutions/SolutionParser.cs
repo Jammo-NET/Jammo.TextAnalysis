@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
+using Jammo.CsAnalysis.MsBuildAnalysis.Solutions.ParserExtensions;
 
 namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
 {
@@ -11,16 +12,16 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
         {
             var stream = new SolutionStream();
             var stateQueue = new List<ParserState>();
+            var previousData = new List<SolutionData>();
 
             stateQueue.Insert(0, ParserState.Any);
-            
-            var tokenizer = new Tokenizer(text, new TokenizerOptions(BasicTokenType.Newline));
-            var parseIndex = tokenizer.Index;
-            
+
+            var tokenizer = new Tokenizer(text, default);
+
             foreach (var token in tokenizer)
             {
                 var currentState = stateQueue.FirstOrDefault();
-                
+
                 switch (currentState)
                 {
                     case ParserState.Any:
@@ -29,7 +30,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
 
                         var anyToken = token;
 
-                        do 
+                        do
                         {
                             anyTokens.Add(anyToken);
 
@@ -44,9 +45,6 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
                                 case "Global":
                                     stateQueue.Insert(0, ParserState.GlobalDef);
                                     break;
-                                case "GlobalSection":
-                                    stateQueue.Insert(0, ParserState.GlobalSection);
-                                    break;
                             }
 
                             if (currentState != stateQueue.FirstOrDefault())
@@ -58,7 +56,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
                     case ParserState.Version:
                     {
                         var versionNum = new StringBuilder();
-                        
+
                         var versionToken = token;
                         do
                         {
@@ -70,17 +68,18 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
 
                         stream.Version = new FormatVersion(versionNum.ToString());
 
+                        previousData.Add(stream.Version);
                         stateQueue.Remove(stateQueue.First());
-                        
+
                         break;
                     }
                     case ParserState.ProjectDef:
                     {
-                        var defState = ProjectDefState.Guid;
+                        var defState = ProjectDefState.ProjectGuid;
                         var projectDef = new ProjectDefinition();
                         var builder = new StringBuilder();
                         var isBuilding = false;
-                        
+
                         var projectDefToken = token;
                         do
                         {
@@ -92,57 +91,174 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
                                 {
                                     switch (defState)
                                     {
-                                        case ProjectDefState.Guid:
-                                            projectDef.Guid = builder.ToString();
+                                        case ProjectDefState.ProjectGuid:
+                                            projectDef.ProjectGuid = builder.ToString();
                                             defState = ProjectDefState.Name;
                                             break;
                                         case ProjectDefState.Name:
                                             projectDef.Name = builder.ToString();
-                                            defState = ProjectDefState.ConfigGuid;
+                                            defState = ProjectDefState.GlobalGuid;
                                             break;
                                         case ProjectDefState.RelativePath:
                                             projectDef.RelativePath = builder.ToString();
                                             break;
-                                        case ProjectDefState.ConfigGuid:
-                                            projectDef.ConfigGuid = builder.ToString();
+                                        case ProjectDefState.GlobalGuid:
+                                            projectDef.GlobalGuid = builder.ToString();
                                             defState = ProjectDefState.RelativePath;
                                             break;
                                     }
 
                                     builder.Clear();
                                 }
-                                
+
                                 continue;
                             }
-                            
-                            if (isBuilding)
-                            {
-                                builder.Append(projectDefToken.Text);
-                            }
-                            
+
+                            if (isBuilding) builder.Append(projectDefToken.Text);
+
                             if (projectDefToken.Text == "EndProject")
+                            {
+                                stateQueue.Remove(stateQueue.First());
                                 break;
+                            }
                         } while ((projectDefToken = tokenizer.Next()) != null);
-                        
+
+                        previousData.Add(projectDef);
                         stream.AddProject(projectDef);
-                        
+
                         break;
                     }
                     case ParserState.GlobalDef:
                     {
-                        break;
-                    }
-                    case ParserState.GlobalSection:
-                    {
-                        break;
-                    }
-                    case ParserState.Configuration:
-                    {
+                        var globalDef = new GlobalDefinition();
+                        
+                        BasicToken globalToken;
+                        while ((globalToken = tokenizer.Next()) != null)
+                        {
+                            if (globalToken.Text == "EndGlobal")
+                                break;
+
+                            if (globalToken.Text == "GlobalSection")
+                            {
+                                var sectionState = GlobalSectionState.ConfigType;
+                                var section = new GlobalSectionDefinition();
+                                var builder = new StringBuilder();
+
+                                BasicToken globalSectionToken;
+                                while ((globalSectionToken = tokenizer.Next()) != null)
+                                {
+                                    if (globalSectionToken.Text == "EndGlobalSection")
+                                        break;
+
+                                    switch (sectionState)
+                                    {
+                                        case GlobalSectionState.ConfigType:
+                                            if (globalSectionToken.Text == "(")
+                                            {
+                                                sectionState = GlobalSectionState.Intermediate;
+                                                builder.Append(tokenizer.ReadUntilOrEnd(")"));
+
+                                                section.ConfigurationType = builder.ToString();
+
+                                                builder.Clear();
+                                            }
+
+                                            break;
+                                        case GlobalSectionState.Intermediate:
+                                            if (globalSectionToken.Text == "=")
+                                                sectionState = GlobalSectionState.RunTime;
+
+                                            break;
+                                        case GlobalSectionState.RunTime:
+                                            if (globalSectionToken.Type == BasicTokenType.Whitespace)
+                                                continue;
+
+                                            sectionState = GlobalSectionState.Configurations;
+                                            builder.Append(globalSectionToken.Text);
+
+                                            section.RunTime = builder.ToString();
+
+                                            builder.Clear();
+
+                                            break;
+                                        case GlobalSectionState.Configurations:
+                                            var configState = GlobalConfigState.ProjectGlobalGuid;
+                                            var config = new GlobalConfiguration();
+                                            var configBuilder = new StringBuilder();
+                                            
+                                            var configToken = globalSectionToken;
+                                            do
+                                            {
+                                                switch (configState)
+                                                {
+                                                    case GlobalConfigState.ProjectGlobalGuid:
+                                                        if (configToken.Text != ".")
+                                                        {
+                                                            configBuilder.Append(configToken.Text);
+                                                            break;
+                                                        }
+
+                                                        config.ProjectGlobalGuid = configBuilder.ToString().TrimStart();
+                                                        configState = GlobalConfigState.Type;
+
+                                                        configBuilder.Clear();
+                                                        break;
+                                                    case GlobalConfigState.Type:
+                                                        if (configToken.Text != ".")
+                                                        {
+                                                            configBuilder.Append(configToken.Text);
+                                                            break;
+                                                        }
+
+                                                        config.Type = configBuilder.ToString();
+                                                        configState = GlobalConfigState.Config;
+                                                        
+                                                        configBuilder.Clear();
+                                                        break;
+                                                    case GlobalConfigState.Config:
+                                                        if (configToken.Text != "=")
+                                                        {
+                                                            configBuilder.Append(configToken.Text);
+                                                            break;
+                                                        }
+
+                                                        config.Config = configBuilder.ToString().Trim();
+                                                        configState = GlobalConfigState.AssignedConfig;
+                                                        
+                                                        configBuilder.Clear();
+                                                        break;
+                                                    case GlobalConfigState.AssignedConfig:
+                                                        if (configToken.Type == BasicTokenType.Newline)
+                                                            configState = GlobalConfigState.Complete;
+                                                        else
+                                                            config.AssignedConfig += configToken.Text;
+
+                                                        break;
+                                                }
+
+                                                if (configState == GlobalConfigState.Complete)
+                                                {
+                                                    config.AssignedConfig = config.AssignedConfig.Trim();
+                                                    break;
+                                                }
+                                            } while ((configToken = tokenizer.Next()) != null);
+
+                                            section.AddConfiguration(config);
+
+                                            break;
+                                    }
+                                }
+
+                                globalDef.AddSection(section);
+                            }
+                        }
+                        // Parse global sections
+
+                        stream.AddGlobal(globalDef);
+
                         break;
                     }
                 }
-
-                parseIndex = tokenizer.Index;
             }
 
             return stream;
@@ -151,17 +267,35 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
         private enum ParserState
         {
             Any = 0,
-            
+
             Version,
             ProjectDef,
             GlobalDef,
-            GlobalSection,
-            Configuration
         }
 
         private enum ProjectDefState
         {
-            Guid, Name, RelativePath, ConfigGuid
+            ProjectGuid,
+            Name,
+            RelativePath,
+            GlobalGuid
+        }
+
+        private enum GlobalSectionState
+        {
+            ConfigType,
+            RunTime,
+            Configurations,
+            Intermediate
+        }
+
+        private enum GlobalConfigState
+        {
+            ProjectGlobalGuid,
+            Config,
+            Type,
+            AssignedConfig,
+            Complete
         }
     }
 }

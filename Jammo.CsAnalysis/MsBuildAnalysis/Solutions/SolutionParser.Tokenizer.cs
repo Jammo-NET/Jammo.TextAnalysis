@@ -19,7 +19,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
             public Tokenizer(string input, TokenizerOptions options)
             {
                 text = input;
-                this.options = options;
+                this.options = options ?? new TokenizerOptions();
             }
 
             public static IEnumerable<BasicToken> Tokenize(string input, TokenizerOptions options)

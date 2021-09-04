@@ -33,7 +33,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
 
         public override string ToFormattedString()
         {
-            throw new System.NotImplementedException();
+            return $"Project({ProjectGuid}) = \"{Name}\", \"{RelativePath}\", \"{GlobalGuid}\"{Environment.NewLine}EndProject";
         }
     }
 

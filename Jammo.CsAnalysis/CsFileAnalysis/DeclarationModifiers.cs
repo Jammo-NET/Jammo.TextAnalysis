@@ -1,5 +1,3 @@
-using System;
-
 namespace Jammo.CsAnalysis.CsFileAnalysis
 {
     public enum DeclarationModifier

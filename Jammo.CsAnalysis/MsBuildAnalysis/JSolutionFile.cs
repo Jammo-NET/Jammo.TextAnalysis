@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Jammo.CsAnalysis.MsBuildAnalysis.Solutions;
-using Microsoft.Build.Construction;
 
 namespace Jammo.CsAnalysis.MsBuildAnalysis
 {

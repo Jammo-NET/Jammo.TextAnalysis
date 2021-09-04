@@ -1,11 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Jammo.CsAnalysis.CsFileAnalysis;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Jammo.CsAnalysis.Compilation
 {

@@ -1,6 +1,5 @@
 using System.IO;
-using System.Threading.Tasks;
-using Microsoft.Build.Construction;
+using Jammo.CsAnalysis.MsBuildAnalysis.Solutions;
 
 namespace Jammo.CsAnalysis.Compilation
 {
@@ -46,11 +45,11 @@ namespace Jammo.CsAnalysis.Compilation
 
         private MergeableCompilation MergeSolution(FileInfo file)
         {
-            var solution = SolutionFile.Parse(file.FullName);
+            var stream = new SolutionStream(file.Open(FileMode.Open, FileAccess.Read, FileShare.Read));
             var comp = MergeDirectory(file.Directory, SearchOption.TopDirectoryOnly);
 
-            foreach (var project in solution.ProjectsInOrder)
-                comp = comp.Merge(MergeProject(new FileInfo(project.AbsolutePath)));
+            foreach (var project in stream.Projects)
+                comp = comp.Merge(MergeProject(new FileInfo(Path.Join(stream.FilePath, project.RelativePath))));
             
             return comp;
         }

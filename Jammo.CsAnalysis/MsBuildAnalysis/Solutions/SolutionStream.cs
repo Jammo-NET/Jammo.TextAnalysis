@@ -14,6 +14,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
         private List<GlobalDefinition> globals = new();
         
         public bool IsInitialized => stream == null;
+        public string FilePath => stream?.Name;
         
         public FormatVersion Version;
         

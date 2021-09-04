@@ -1,5 +1,3 @@
-using Jammo.CsAnalysis.Compilation;
-
 namespace Jammo.CsAnalysis.CsFileAnalysis
 {
     public class MemberModifier

@@ -1,21 +1,34 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Jammo.CsAnalysis.MsBuildAnalysis
 {
-    public partial class SlnParser
-    {
-        private class Tokenizer
+    public static partial class SlnParser 
+    { 
+        private class Tokenizer : IEnumerable<BasicToken>
         {
-            private string text;
+            private readonly string text;
 
             public int Index { get; private set; }
 
             public Tokenizer(string input)
             {
                 text = input;
+            }
+
+            public static IEnumerable<BasicToken> Tokenize(string input)
+            {
+                var tokens = new List<BasicToken>();
+                var tokenizer = new Tokenizer(input);
+                
+                BasicToken token;
+                while ((token = tokenizer.Next()) != null)
+                    tokens.Add(token);
+
+                return tokens;
             }
 
             public BasicToken Next()
@@ -39,6 +52,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
                     if (char.IsWhiteSpace(character) &&
                         (char.IsWhiteSpace(currentRead.LastOrDefault()) || string.IsNullOrEmpty(currentRead)))
                     {
+                        currentTokenType = BasicTokenType.Whitespace;
                         currentRead += character;
 
                         if (currentRead == Environment.NewLine)
@@ -73,7 +87,11 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
                              string.IsNullOrEmpty(currentRead)) &&
                              !char.IsPunctuation(character))
                     { // Allow abc123
-                        currentTokenType = BasicTokenType.Alphabetical;
+                        if (char.IsLetter(currentRead.LastOrDefault()))
+                            currentTokenType = BasicTokenType.Alphabetical;
+                        else
+                            currentTokenType = BasicTokenType.Numerical;
+                        
                         currentRead += character;
                     }
                     else
@@ -86,6 +104,26 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
                     return null;
                 
                 return new BasicToken(currentRead, currentTokenType, new IndexSpan(Index, text.Length - 1));
+            }
+
+            public IEnumerator<BasicToken> GetEnumerator()
+            {
+                BasicToken token;
+                while ((token = Next()) != null)
+                    yield return token;
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+        }
+
+        private class BasicTokenCollection : Collection<BasicToken>
+        {
+            public override string ToString()
+            {
+                return string.Concat(this.Select(token => token.Text));
             }
         }
 

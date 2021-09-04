@@ -26,16 +26,6 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
             Projects = SolutionFile.Parse(path).ProjectsInOrder
                 .Select(p => new CsProjectFile(p.AbsolutePath));
         }
-
-        public void AddProject(CsProjectFile project)
-        {
-            
-        }
-        
-        public void RemoveProject(CsProjectFile project)
-        {
-            
-        }
     }
 
     public class SlnFileData

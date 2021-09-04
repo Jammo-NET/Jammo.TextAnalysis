@@ -4,46 +4,59 @@ using System.Linq;
 
 namespace Jammo.CsAnalysis.MsBuildAnalysis
 {
-    public partial class SlnParser
+    public static partial class SlnParser
     {
-        public readonly SlnFileData Result;
-        
-        public SlnParser(string text)
+        public static SlnFileData Parse(string text)
         {
             var slnData = new SlnFileData();
-            
             var stateQueue = new List<ParserState>();
-            var tokens = new List<BasicToken>();
 
-            stateQueue.Add(ParserState.Any);
-
+            stateQueue.Insert(0, ParserState.Any);
+            
             var tokenizer = new Tokenizer(text);
             var parseIndex = tokenizer.Index;
             
-            BasicToken token;
-            while ((token = tokenizer.Next()) != null)
+            foreach (var token in tokenizer)
             {
-                tokens.Add(token);
+                if (token.Type == BasicTokenType.Newline)
+                    continue;
+
+                var currentState = stateQueue.FirstOrDefault();
                 
-                switch (stateQueue.LastOrDefault())
+                switch (currentState)
                 {
                     case ParserState.Any:
                     {
-                        switch (token.Text)
+                        var anyTokens = new BasicTokenCollection();
+
+                        var anyToken = token;
+
+                        do 
                         {
-                            case "Version":
-                                stateQueue.Add(ParserState.Version);
+                            if (anyToken.Type == BasicTokenType.Newline)
+                                continue;
+
+                            anyTokens.Add(anyToken);
+
+                            switch (anyTokens.ToString())
+                            {
+                                case "Microsoft Visual Studio Solution File, Format Version":
+                                    stateQueue.Insert(0, ParserState.Version);
+                                    break;
+                                case "Project":
+                                    stateQueue.Insert(0, ParserState.ProjectDef);
+                                    break;
+                                case "Global":
+                                    stateQueue.Insert(0, ParserState.GlobalDef);
+                                    break;
+                                case "GlobalSection":
+                                    stateQueue.Insert(0, ParserState.GlobalSection);
+                                    break;
+                            }
+
+                            if (currentState != stateQueue.FirstOrDefault())
                                 break;
-                            case "Project":
-                                stateQueue.Add(ParserState.ProjectDef);
-                                break;
-                            case "Global":
-                                stateQueue.Add(ParserState.GlobalDef);
-                                break;
-                            case "GlobalSection":
-                                stateQueue.Add(ParserState.GlobalSection);
-                                break;
-                        }
+                        } while ((anyToken = tokenizer.Next()) != null);
 
                         break;
                     }
@@ -51,17 +64,17 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
                     {
                         var versionNum = string.Empty;
                         
-                        BasicToken versionToken;
-                        while ((versionToken = tokenizer.Next()) != null)
+                        var versionToken = token;
+                        do
                         {
                             if (versionToken.Type == BasicTokenType.Newline)
                                 break;
-                            
+
                             if (versionToken.Type == BasicTokenType.Whitespace)
                                 continue;
-                            
+
                             versionNum += versionToken.Text;
-                        }
+                        } while ((versionToken = tokenizer.Next()) != null);
 
                         slnData.FormattedVersion = new FormatVersion(versionNum, new IndexSpan(parseIndex, tokenizer.Index));
 
@@ -96,7 +109,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
                 parseIndex = tokenizer.Index;
             }
 
-            Result = slnData;
+            return slnData;
         }
 
         private enum ParserState

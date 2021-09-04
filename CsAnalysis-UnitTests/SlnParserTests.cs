@@ -10,9 +10,9 @@ namespace JammaNalysis_UnitTests
         [Test]
         public void TestVersion()
         {
-            var parser = new SlnParser("Microsoft Visual Studio Solution File, Format Version 12.00");
+            var result = SlnParser.Parse("Microsoft Visual Studio Solution File, Format Version 12.00");
             
-            Assert.True(parser.Result.FormattedVersion.ToString() == "12.00");
+            Assert.True(result.FormattedVersion.Version == "12.00");
         }
     }
 }

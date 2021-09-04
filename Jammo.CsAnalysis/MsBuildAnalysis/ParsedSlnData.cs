@@ -8,23 +8,17 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
         {
             Span = span;
         }
-
-        public abstract override string ToString();
+        
         public abstract string ToFormattedString();
     }
 
     public class FormatVersion : ParsedSlnData
     {
-        private string Version { get; }
+        public string Version { get; }
         
         public FormatVersion(string version, IndexSpan span) : base(span)
         {
             Version = version;
-        }
-
-        public override string ToString()
-        {
-            return Version;
         }
 
         public override string ToFormattedString()

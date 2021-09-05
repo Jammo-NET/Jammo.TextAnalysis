@@ -22,8 +22,9 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
 
             if (info.Extension != ".sln")
                 throw new ArgumentException("Expected a .sln file.");
-            
-            Stream = new SolutionStream(info.Open(FileMode.Open, FileAccess.Read, FileShare.Read));
+
+            using var fileStream = info.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
+            Stream = new SolutionStream(fileStream);
             
             UpdateProjects();
         }

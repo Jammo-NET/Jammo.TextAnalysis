@@ -9,7 +9,7 @@ namespace Jammo.CsAnalysis.Inspection.Rules
         public abstract string InspectionName { get; }
         public abstract string InspectionMessage { get; }
 
-        public virtual void TestUsingDirective(UsingDirectiveSyntax syntax, MergeableCompilation context) { }
+        public virtual void TestUsingDirective(UsingDirectiveSyntax syntax, CompilationWrapper context) { }
 
         public virtual void TestNamespaceDeclaration() { }
         

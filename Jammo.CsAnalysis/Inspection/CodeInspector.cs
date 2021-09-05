@@ -13,7 +13,7 @@ namespace Jammo.CsAnalysis.Inspection
             Inspections = inspections;
         }
 
-        public static CodeInspector Inspect(string text, MergeableCompilation context)
+        public static CodeInspector Inspect(string text, CompilationWrapper context)
         {
             var tree = CSharpSyntaxTree.ParseText(text);
             var root = tree.GetRoot();

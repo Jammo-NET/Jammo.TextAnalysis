@@ -43,7 +43,8 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
             if (FileInfo.Directory == null)
                 return;
 
-            var reader = new StreamReader(FileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
+            using var fileStream = FileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            using var reader = new StreamReader(fileStream);
             var document = XDocument.Parse(reader.ReadToEndAsync().Result);
 
             var root = document.Root;
@@ -60,7 +61,8 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
 
         public void Write()
         {
-            ProjectHead.Save(FileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.Read));
+            using var fileStream = FileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
+            ProjectHead.Save(fileStream);
         }
 
         private ProjectDirectory ReadDirectory(DirectoryInfo info)

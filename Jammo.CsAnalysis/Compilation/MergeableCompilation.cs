@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Jammo.CsAnalysis.CsFileAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace Jammo.CsAnalysis.Compilation
 {
@@ -34,7 +35,7 @@ namespace Jammo.CsAnalysis.Compilation
                         .ToArray());
                     
                 Success = true;
-                Files = Files.Concat(new[] { file }).ToArray();
+                Files = new[] { file };
             }
             catch (IOException)
             {

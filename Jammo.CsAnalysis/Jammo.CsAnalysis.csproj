@@ -10,8 +10,8 @@
         <RepositoryUrl>https://github.com/Jammo-NET/Jammo.CsAnalysis</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>syntax, analysis</PackageTags>
-        <PackageVersion>1.0.0</PackageVersion>
-        <PackageReleaseNotes>Fixed some null reference errors when using names</PackageReleaseNotes>
+        <PackageVersion>1.1.0</PackageVersion>
+        <PackageReleaseNotes>Create SolutionStream, wraps a custom .sln parser and allows for easy read/write programmatically.</PackageReleaseNotes>
         <Authors>zeplar exe</Authors>
     </PropertyGroup>
 

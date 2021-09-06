@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
             foreach (var token in tokenizer)
             {
                 var currentState = stateQueue.FirstOrDefault();
-
+                
                 switch (currentState)
                 {
                     case ParserState.Any:
@@ -30,8 +31,11 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
 
                         do
                         {
+                            if (anyToken.Type == BasicTokenType.Newline)
+                                continue;
+                            
                             anyTokens.Add(anyToken);
-
+                            
                             switch (anyTokens.ToString())
                             {
                                 case "Microsoft Visual Studio Solution File, Format Version":
@@ -60,6 +64,10 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
                         {
                             if (versionToken.Type == BasicTokenType.Whitespace)
                                 continue;
+                            
+                            if (versionToken.Type != BasicTokenType.Numerical &&
+                                versionToken.Type != BasicTokenType.Punctuation)
+                                break;
 
                             versionNum.Append(versionToken.Text);
                         } while ((versionToken = tokenizer.Next()) != null);

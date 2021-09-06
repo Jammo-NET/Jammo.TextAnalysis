@@ -44,10 +44,6 @@ namespace JammaNalysis_UnitTests
             [Test]
             public void TestConfiguration()
             {
-                Console.WriteLine(testStream.Globals.First().Sections.First().Configurations.First().ProjectGlobalGuid);
-                Console.WriteLine(testStream.Globals.First().Sections.First().Configurations.First().Type);
-                Console.WriteLine(testStream.Globals.First().Sections.First().Configurations.First().Config);
-                Console.WriteLine(testStream.Globals.First().Sections.First().Configurations.First().AssignedConfig);
                 Assert.True(testStream.Globals.First().Sections.First().Configurations.First().AssignedConfig == "E");
             }
         }
@@ -55,7 +51,17 @@ namespace JammaNalysis_UnitTests
         [TestFixture]
         public class TestProjectDefinition
         {
-            private string testString = $"Project(\"MyGuid\") = \"MyProject\", \"MyPath\", \"MyConfigGuid\" EndProject";
+            private string testString =
+                "\r\n" +
+                "Microsoft Visual Studio Solution File, Format Version 12.00\r\n" +
+                "Project(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"TempoIDE\", \"TempoIDE\\TempoIDE.csproj\", \"{669B4658-B1F4-4240-9DFA-6E7BD2AE9353}\r\n" +
+                "EndProject\r\n" +
+                "Project(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"TempoControls\", \"TempoControls\\TempoControls.csproj\", \"{CA418233-665F-467B-9CD2-CDC7369080C3}\"\r\n" +
+                "EndProject\r\n" +
+                "Project(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"TempoControlsTests\", \"TempoControlsTests\\TempoControlsTests.csproj\", \"{CE7E66D2-5CE1-4C00-AF2C-54BBEEE7B85C}\"\r\n" +
+                "EndProject\r\n" +
+                "Project(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"TempoSourceGen\", \"TempoSourceGen\\TempoSourceGen.csproj\", \"{3A5C9931-BAD5-4D1E-A2C8-A847DD4F4AFA}\"\r\n" +
+                "EndProject\r\n";
             private SolutionStream testStream;
             
             [SetUp]
@@ -67,7 +73,7 @@ namespace JammaNalysis_UnitTests
             [Test]
             public void TestProjectName()
             {
-                Assert.True(testStream.Projects.First().Name == "MyProject");
+                Assert.True(testStream.Projects.First().Name == "TempoIDE");
             }
         }
     }

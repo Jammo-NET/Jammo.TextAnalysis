@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Jammo.CsAnalysis.CodeInspection.Rules;
 using Jammo.CsAnalysis.Compilation;
-using Jammo.CsAnalysis.Inspection.Rules;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Jammo.CsAnalysis.Inspection
+namespace Jammo.CsAnalysis.CodeInspection
 {
     public class CodeInspector
     {
@@ -35,14 +35,14 @@ namespace Jammo.CsAnalysis.Inspection
 
         private class RuleWalker : CSharpSyntaxWalker
         {
-            private CompilationWrapper context;
+            private readonly CompilationWrapper context;
             
-            private IEnumerable<InspectionRule> rules;
-            private List<Inspection> result;
+            private readonly IEnumerable<InspectionRule> rules;
+            private readonly List<Inspection> result = new();
             
             public IEnumerable<Inspection> Result => result;
 
-            public RuleWalker(IEnumerable<InspectionRule> rules, CompilationWrapper context)
+            public RuleWalker(IEnumerable<InspectionRule> rules, CompilationWrapper context) : base(SyntaxWalkerDepth.Trivia)
             {
                 this.rules = rules;
                 this.context = context;
@@ -51,66 +51,90 @@ namespace Jammo.CsAnalysis.Inspection
             public override void VisitUsingDirective(UsingDirectiveSyntax node)
             {
                 AddInspections(r => r.TestUsingDirective(node, context));
+                
+                base.VisitUsingDirective(node);
             }
 
             public override void VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
             {
                 AddInspections(r => r.TestNamespaceDeclaration(node, context));
+                
+                base.VisitNamespaceDeclaration(node);
             }
 
             public override void VisitClassDeclaration(ClassDeclarationSyntax node)
             {
                 AddInspections(r => r.TestClassDeclaration(node, context));
+                
+                base.VisitClassDeclaration(node);
             }
 
             public override void VisitStructDeclaration(StructDeclarationSyntax node)
             {
                 AddInspections(r => r.TestStructDeclaration(node, context));
+                
+                base.VisitStructDeclaration(node);
             }
 
             public override void VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
             {
                 AddInspections(r => r.TestInterfaceDeclaration(node, context));
+                
+                base.VisitInterfaceDeclaration(node);
             }
 
             public override void VisitRecordDeclaration(RecordDeclarationSyntax node)
             {
                 AddInspections(r => r.TestRecordDeclaration(node, context));
+                
+                base.VisitRecordDeclaration(node);
             }
 
             public override void VisitFieldDeclaration(FieldDeclarationSyntax node)
             {
                 AddInspections(r => r.TestFieldDeclaration(node, context));
+                
+                base.VisitFieldDeclaration(node);
             }
 
             public override void VisitPropertyDeclaration(PropertyDeclarationSyntax node)
             {
                 AddInspections(r => r.TestPropertyDeclaration(node, context));
+                
+                base.VisitPropertyDeclaration(node);
             }
 
             public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
             {
                 AddInspections(r => r.TestMethodDeclaration(node, context));
+                
+                base.VisitMethodDeclaration(node);
             }
 
             public override void VisitVariableDeclaration(VariableDeclarationSyntax node)
             {
                 AddInspections(r => r.TestVariableAssignment(node, context));
+                
+                base.VisitVariableDeclaration(node);
             }
 
             public override void VisitVariableDeclarator(VariableDeclaratorSyntax node)
             {
                 AddInspections(r => r.TestVariableDeclaration(node, context));
+                
+                base.VisitVariableDeclarator(node);
             }
 
             public override void VisitMemberAccessExpression(MemberAccessExpressionSyntax node)
             {
                 AddInspections(r => r.TestMemberAccess(node, context));
+                
+                base.VisitMemberAccessExpression(node);
             }
 
             public override void VisitExpressionStatement(ExpressionStatementSyntax node)
             {
-                Func<InspectionRule, Inspection> flag = null;
+                Func<InspectionRule, Inspection> flag;
 
                 switch (node.Kind())
                 {
@@ -140,11 +164,13 @@ namespace Jammo.CsAnalysis.Inspection
                 }
                 
                 AddInspections(flag);
+                
+                base.VisitExpressionStatement(node);
             }
 
             public override void VisitLiteralExpression(LiteralExpressionSyntax node)
             {
-                Func<InspectionRule, Inspection> flag = null;
+                Func<InspectionRule, Inspection> flag;
 
                 switch (node.Kind())
                 {
@@ -159,11 +185,13 @@ namespace Jammo.CsAnalysis.Inspection
                 }
                 
                 AddInspections(flag);
+                
+                base.VisitLiteralExpression(node);
             }
 
             public override void VisitTrivia(SyntaxTrivia trivia)
             {
-                Func<InspectionRule, Inspection> flag = null;
+                Func<InspectionRule, Inspection> flag;
 
                 switch (trivia.Kind())
                 {
@@ -184,11 +212,13 @@ namespace Jammo.CsAnalysis.Inspection
                 }
                 
                 AddInspections(flag);
+                
+                base.VisitTrivia(trivia);
             }
             
-            private void AddInspections(Func<InspectionRule, Inspection> flag)
+            private void AddInspections(Func<InspectionRule, Inspection> factory)
             {
-                result.AddRange(rules.Select(flag).Where(r => r != null));
+                result.AddRange(rules.Select(factory).Where(r => r != null));
             }
         }
     }

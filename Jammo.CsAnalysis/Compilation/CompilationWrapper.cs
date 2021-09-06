@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Jammo.CsAnalysis.CodeInspection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -10,8 +11,11 @@ namespace Jammo.CsAnalysis.Compilation
     public class CompilationWrapper
     {
         private readonly List<string> rawText = new();
+        private CodeInspector inspector;
 
-        public CSharpCompilation Compilation;
+        public IEnumerable<Inspection> Inspections => inspector?.Inspections;
+
+        public CSharpCompilation Compilation { get; private set; }
         public INamespaceSymbol GlobalNamespace => Compilation?.GlobalNamespace;
         public string RawText => string.Concat(rawText);
 
@@ -45,14 +49,17 @@ namespace Jammo.CsAnalysis.Compilation
             rawText.Clear();
         }
 
+        public void WithInspector(CodeInspector newInspector)
+        {
+            inspector = newInspector;
+        }
+
         public void GenerateCompilation()
         {
-            var trees = new List<SyntaxTree>();
-
-            foreach (var raw in rawText)
-                trees.Add(CSharpSyntaxTree.ParseText(raw));
+            var trees = rawText.Select(t => CSharpSyntaxTree.ParseText(t));
 
             Compilation = CSharpCompilation.Create($"JAMMO_COMP_{Guid.NewGuid()}", trees.ToArray());
+            inspector?.Inspect(string.Concat(rawText), this);
         }
     }
 }

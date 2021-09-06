@@ -2,7 +2,7 @@ using Jammo.CsAnalysis.Compilation;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Jammo.CsAnalysis.Inspection.Rules
+namespace Jammo.CsAnalysis.CodeInspection.Rules
 {
     public abstract class InspectionRule
     {

@@ -1,7 +1,6 @@
-using Jammo.CsAnalysis.Inspection.Rules;
-using Microsoft.CodeAnalysis;
+using Jammo.CsAnalysis.CodeInspection.Rules;
 
-namespace Jammo.CsAnalysis.Inspection
+namespace Jammo.CsAnalysis.CodeInspection
 {
     public class Inspection
     {

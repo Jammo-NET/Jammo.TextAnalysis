@@ -17,24 +17,6 @@ namespace JammaNalysis_UnitTests
             Assert.True(result.Version.Value == "12.00");
         }
 
-        [Test]
-        public void TestParseWrite()
-        {
-            var stream = new SolutionStream();
-            var project = new ProjectDefinition
-            {
-                Name = "MyProject",
-                ProjectGuid = Guid.NewGuid().ToString(),
-                GlobalGuid = Guid.NewGuid().ToString(),
-                RelativePath = "N/A"
-            };
-            
-            stream.Version = new FormatVersion("12.00");
-            stream.AddProject(project);
-            
-            stream.WriteTo(Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MyTestSolution.sln"));
-        }
-
         [TestFixture]
         public class TestGlobalDefinition
         {

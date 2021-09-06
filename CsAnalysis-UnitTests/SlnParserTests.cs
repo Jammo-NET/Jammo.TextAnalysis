@@ -75,6 +75,12 @@ namespace JammaNalysis_UnitTests
             {
                 Assert.True(testStream.Projects.First().Name == "TempoIDE");
             }
+            
+            [Test]
+            public void TestProjectPath()
+            {
+                Assert.True(testStream.Projects.First().RelativePath == "TempoIDE\\TempoIDE.csproj");
+            }
         }
     }
 }

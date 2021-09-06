@@ -102,14 +102,14 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
                                             break;
                                         case ProjectDefState.Name:
                                             projectDef.Name = builder.ToString();
-                                            defState = ProjectDefState.GlobalGuid;
+                                            defState = ProjectDefState.RelativePath;
                                             break;
                                         case ProjectDefState.RelativePath:
                                             projectDef.RelativePath = builder.ToString();
+                                            defState = ProjectDefState.GlobalGuid;
                                             break;
                                         case ProjectDefState.GlobalGuid:
                                             projectDef.GlobalGuid = builder.ToString();
-                                            defState = ProjectDefState.RelativePath;
                                             break;
                                     }
 

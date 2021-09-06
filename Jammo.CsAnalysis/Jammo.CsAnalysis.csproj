@@ -10,8 +10,8 @@
         <RepositoryUrl>https://github.com/Jammo-NET/Jammo.CsAnalysis</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>syntax, analysis</PackageTags>
-        <PackageVersion>1.2.0</PackageVersion>
-        <PackageReleaseNotes>Create inspection alaysis, allowing for custom inspections. Only contains one inspection by default for testing purposes.</PackageReleaseNotes>
+        <PackageVersion>1.2.1</PackageVersion>
+        <PackageReleaseNotes>Fix newline edge case when using SolutionParser.</PackageReleaseNotes>
         <Authors>zeplar exe</Authors>
     </PropertyGroup>
 

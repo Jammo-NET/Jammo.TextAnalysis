@@ -51,11 +51,12 @@ namespace Jammo.CsAnalysis.Compilation
         {
             using var fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
             using var stream = new SolutionStream(fileStream);
+            var slnDirectory = new FileInfo(stream.FilePath).Directory;
             var files = new List<FileInfo>();
 
             foreach (var project in stream.Projects)
                 files.AddRange(
-                    GetProjectFiles(new FileInfo(Path.Join(stream.FilePath, project.RelativePath))));
+                    GetProjectFiles(new FileInfo(Path.Join(slnDirectory?.FullName, project.RelativePath))));
             
             return files;
         }

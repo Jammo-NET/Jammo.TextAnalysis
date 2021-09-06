@@ -10,8 +10,8 @@
         <RepositoryUrl>https://github.com/Jammo-NET/Jammo.CsAnalysis</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>syntax, analysis</PackageTags>
-        <PackageVersion>1.2.1</PackageVersion>
-        <PackageReleaseNotes>Fix newline edge case when using SolutionParser.</PackageReleaseNotes>
+        <PackageVersion>1.2.4</PackageVersion>
+        <PackageReleaseNotes>CSharpAnalysisWrapepr now only selects .cs files to compile</PackageReleaseNotes>
         <Authors>zeplar exe</Authors>
     </PropertyGroup>
 

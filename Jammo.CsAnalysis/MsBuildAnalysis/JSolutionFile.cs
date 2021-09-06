@@ -34,7 +34,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis
             Stream.Parse();
             
             ProjectFiles = Stream.Projects
-                .Select(p => new JProjectFile(Path.Join(info.FullName, p.RelativePath)));
+                .Select(p => new JProjectFile(Path.Join(info.DirectoryName, p.RelativePath)));
         }
 
         public void Dispose()

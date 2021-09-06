@@ -68,7 +68,7 @@ namespace Jammo.CsAnalysis.Compilation
         
         private IEnumerable<FileInfo> GetDirectoryFiles(DirectoryInfo directory, SearchOption query)
         {
-            return directory.GetFiles("*", query);
+            return directory.GetFiles("*.cs", query);
         }
     }
 

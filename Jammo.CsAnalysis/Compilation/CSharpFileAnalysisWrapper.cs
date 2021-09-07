@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using Jammo.CsAnalysis.MsBuildAnalysis;
 using Jammo.CsAnalysis.MsBuildAnalysis.Solutions;
 
 namespace Jammo.CsAnalysis.Compilation

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Jammo.CsAnalysis.CodeInspection;
+using Jammo.CsAnalysis.CodeInspection.Rules;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -17,7 +18,7 @@ namespace Jammo.CsAnalysis.Compilation
 
         public CSharpCompilation Compilation { get; private set; }
         public INamespaceSymbol GlobalNamespace => Compilation?.GlobalNamespace;
-        public string RawText => string.Concat(rawText);
+        public string RawText => string.Join('\n', rawText);
 
         public void AppendFile(FileInfo file)
         {
@@ -54,6 +55,11 @@ namespace Jammo.CsAnalysis.Compilation
             inspector = newInspector;
         }
 
+        internal void CreateInspection(SyntaxNode node, InspectionRule rule)
+        {
+            inspector.AddInspection(new Inspection(node.ToString(), IndexSpan.FromTextSpan(node.Span), rule));
+        }
+        
         public void GenerateCompilation()
         {
             var trees = rawText.Select(t => CSharpSyntaxTree.ParseText(t));

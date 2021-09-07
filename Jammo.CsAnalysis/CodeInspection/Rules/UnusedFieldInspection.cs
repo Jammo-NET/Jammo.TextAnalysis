@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Jammo.CsAnalysis.Compilation;
 using Microsoft.CodeAnalysis;
@@ -16,20 +17,33 @@ namespace Jammo.CsAnalysis.CodeInspection.Rules
                 "Field is never used within the target compilation.");
         }
 
-        public override Inspection TestFieldDeclaration(FieldDeclarationSyntax syntax, CompilationWrapper context)
+        public override void TestFieldDeclaration(FieldDeclarationSyntax syntax, CompilationWrapper context)
         {
+            var matchedVars = new Dictionary<VariableDeclaratorSyntax, bool>();
+
+            foreach (var variable in syntax.Declaration.Variables)
+                matchedVars[variable] = false;
+            
             foreach (var tree in context.Compilation.SyntaxTrees)
             {
-                var root = tree.GetRoot();
-
-                foreach (var node in root.DescendantNodes().OfType<IdentifierNameSyntax>())
+                foreach (var node in tree.GetRoot().DescendantNodes().OfType<IdentifierNameSyntax>())
                 {
-                    if (node.Identifier.Text == syntax.Declaration.Variables.First().ToString())
-                        return null;
+                    foreach (var variable in matchedVars)
+                    {
+                        if (matchedVars.All(k => k.Value))
+                            return;
+                        
+                        if (variable.ToString() == node.Identifier.Text)
+                            matchedVars[variable.Key] = true;
+                    }
                 }
             }
 
-            return RuleHelper.CreateInspection(syntax, this);
+            foreach (var variable in matchedVars
+                .Where(v => v.Value == false))
+            {
+                context.CreateInspection(variable.Key, this);
+            }
         }
     }
 }

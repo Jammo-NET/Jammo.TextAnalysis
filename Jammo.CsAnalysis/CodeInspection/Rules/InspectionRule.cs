@@ -8,39 +8,37 @@ namespace Jammo.CsAnalysis.CodeInspection.Rules
     {
         public abstract InspectionInfo GetInspectionInfo();
 
-        public virtual Inspection TestUsingDirective(UsingDirectiveSyntax syntax, CompilationWrapper context) => null;
-        
-        public virtual Inspection TestNamespaceDeclaration(NamespaceDeclarationSyntax syntax, CompilationWrapper context) => null;
-        
-        public virtual Inspection TestClassDeclaration(ClassDeclarationSyntax syntax, CompilationWrapper context) => null;
-        public virtual Inspection TestStructDeclaration(StructDeclarationSyntax syntax, CompilationWrapper context) => null;
-        public virtual Inspection TestInterfaceDeclaration(InterfaceDeclarationSyntax syntax, CompilationWrapper context) => null;
-        public virtual Inspection TestRecordDeclaration(RecordDeclarationSyntax syntax, CompilationWrapper context) => null;
-        
-        public virtual Inspection TestFieldDeclaration(FieldDeclarationSyntax syntax, CompilationWrapper context) => null;
-        public virtual Inspection TestPropertyDeclaration(PropertyDeclarationSyntax syntax, CompilationWrapper context) => null;
-        public virtual Inspection TestMethodDeclaration(MethodDeclarationSyntax syntax, CompilationWrapper context) => null;
-        
-        public virtual Inspection TestVariableDeclaration(VariableDeclaratorSyntax syntax, CompilationWrapper context) => null;
-        public virtual Inspection TestVariableAssignment(VariableDeclarationSyntax syntax, CompilationWrapper context) => null;
-        public virtual Inspection TestMethodInvocation(InvocationExpressionSyntax syntax, CompilationWrapper context) => null;
-        public virtual Inspection TestMemberAccess(MemberAccessExpressionSyntax syntax, CompilationWrapper context) => null;
-        
-        public virtual Inspection TestValueEquals(ExpressionStatementSyntax syntax, CompilationWrapper context) => null;
-        public virtual Inspection TestValueNotEqual(ExpressionStatementSyntax syntax, CompilationWrapper context) => null;
-        public virtual Inspection TestNot(ExpressionStatementSyntax node, CompilationWrapper context) => null;
-        public virtual Inspection TestLessThan(ExpressionStatementSyntax syntax, CompilationWrapper context) => null;
-        public virtual Inspection TestGreaterThan(ExpressionStatementSyntax syntax, CompilationWrapper context) => null;
-        public virtual Inspection TestLessThanOrEqual(ExpressionStatementSyntax syntax, CompilationWrapper context) => null;
-        public virtual Inspection TestMoreThanOrEqual(ExpressionStatementSyntax syntax, CompilationWrapper context) => null;
-        
-        // TODO: Stuff like |, ||, &, &&...
+        public virtual void TestUsingDirective(UsingDirectiveSyntax syntax, CompilationWrapper context) { }
+                       
+        public virtual void TestNamespaceDeclaration(NamespaceDeclarationSyntax syntax, CompilationWrapper context) { }
+                       
+        public virtual void TestClassDeclaration(ClassDeclarationSyntax syntax, CompilationWrapper context) { }
+        public virtual void TestStructDeclaration(StructDeclarationSyntax syntax, CompilationWrapper context) { }
+        public virtual void TestInterfaceDeclaration(InterfaceDeclarationSyntax syntax, CompilationWrapper context) { }
+        public virtual void TestRecordDeclaration(RecordDeclarationSyntax syntax, CompilationWrapper context) { }
+                       
+        public virtual void TestFieldDeclaration(FieldDeclarationSyntax syntax, CompilationWrapper context) { }
+        public virtual void TestPropertyDeclaration(PropertyDeclarationSyntax syntax, CompilationWrapper context) { }
+        public virtual void TestMethodDeclaration(MethodDeclarationSyntax syntax, CompilationWrapper context) { }
+                       
+        public virtual void TestVariableDeclaration(VariableDeclarationSyntax syntax, CompilationWrapper context) { }
+        public virtual void TestVariableAssignment(VariableDeclaratorSyntax syntax, CompilationWrapper context) { }
+        public virtual void TestMethodInvocation(InvocationExpressionSyntax syntax, CompilationWrapper context) { }
+        public virtual void TestMemberAccess(MemberAccessExpressionSyntax syntax, CompilationWrapper context) { }
+                       
+        public virtual void TestValueEquals(ExpressionStatementSyntax syntax, CompilationWrapper context) { }
+        public virtual void TestValueNotEqual(ExpressionStatementSyntax syntax, CompilationWrapper context) { }
+        public virtual void TestNot(ExpressionStatementSyntax node, CompilationWrapper context) { }
+        public virtual void TestLessThan(ExpressionStatementSyntax syntax, CompilationWrapper context) { }
+        public virtual void TestGreaterThan(ExpressionStatementSyntax syntax, CompilationWrapper context) { }
+        public virtual void TestLessThanOrEqual(ExpressionStatementSyntax syntax, CompilationWrapper context) { }
+        public virtual void TestMoreThanOrEqual(ExpressionStatementSyntax syntax, CompilationWrapper context) { }
 
-        public virtual Inspection TestStringLiteral(LiteralExpressionSyntax syntax, CompilationWrapper context) => null;
-        public virtual Inspection TestNumericLiteral(LiteralExpressionSyntax syntax, CompilationWrapper context) => null;
-        public virtual Inspection TestSingleLineComment(SyntaxTrivia syntax, CompilationWrapper context) => null;
-        public virtual Inspection TestMultiLineComment(SyntaxTrivia syntax, CompilationWrapper context) => null;
-        public virtual Inspection TestDocumentationComment(SyntaxTrivia trivia, CompilationWrapper context) => null;
+        public virtual void TestStringLiteral(LiteralExpressionSyntax syntax, CompilationWrapper context) { }
+        public virtual void TestNumericLiteral(LiteralExpressionSyntax syntax, CompilationWrapper context) { }
+        public virtual void TestSingleLineComment(SyntaxTrivia syntax, CompilationWrapper context) { }
+        public virtual void TestMultiLineComment(SyntaxTrivia syntax, CompilationWrapper context) { }
+        public virtual void TestDocumentationComment(SyntaxTrivia trivia, CompilationWrapper context) { }
     }
 
     public readonly struct InspectionInfo

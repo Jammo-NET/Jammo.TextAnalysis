@@ -24,51 +24,53 @@ namespace JammaNalysis_UnitTests
                                 "}");
                 
                 var inspector = new CodeInspector();
-                inspector.WithRules(new[] { new UnusedFieldInspection() });
+                inspector.AddRules(new[] { new UnusedFieldInspection() });
                     
-                comp.WithInspector(inspector);
+                comp.SetInspector(inspector);
                 comp.GenerateCompilation();
                 
                 Console.WriteLine(comp.Inspections.First().Span.Size);
                 Assert.True(comp.Inspections.First().Span.Size == 5);
             }
-            
+
             [Test]
             public void TestUnusedFieldInspection()
             {
                 var comp = new CompilationWrapper();
             
-                comp.AppendText("public class MyInspectionTest" +
-                                "{" +
-                                "   private int myVar;" +
+                comp.AppendText("public class MyInspectionTest\n" +
+                                "{\n" +
+                                "   private int myVar, myVar2, myVar3;\n" +
                                 "}");
                 
                 var inspector = new CodeInspector();
-                inspector.WithRules(new[] { new UnusedFieldInspection() });
+                inspector.AddRules(new[] { new UnusedFieldInspection() });
                     
-                comp.WithInspector(inspector);
-                comp.GenerateCompilation();
-                
-                Assert.True(comp.Inspections.Any());
-            }
-
-            [Test]
-            public void TestMultipleAssignment()
-            {
-                var comp = new CompilationWrapper();
-            
-                comp.AppendText("public class MyInspectionTest" +
-                                "{" +
-                                "   private int myVar, myVar2, myVar3;" +
-                                "}");
-                
-                var inspector = new CodeInspector();
-                inspector.WithRules(new[] { new UnusedFieldInspection() });
-                    
-                comp.WithInspector(inspector);
+                comp.SetInspector(inspector);
                 comp.GenerateCompilation();
                 
                 Assert.True(comp.Inspections.Count() == 3);
+            }
+
+            [Test]
+            public void TestIncorrectFlagInspection()
+            {
+                var comp = new CompilationWrapper();
+            
+                comp.AppendText("[Flags]\n" +
+                                "public enum MyEnum\n" +
+                                "{\n" +
+                                "   Foo = 1;\n" +
+                                "   OtherFoo = 1<<0\n" +
+                                "}");
+                
+                var inspector = new CodeInspector();
+                inspector.AddRules(new[] { new IncorrectFlagInspection() });
+                    
+                comp.SetInspector(inspector);
+                comp.GenerateCompilation();
+                
+                Assert.True(comp.Inspections.Count() == 1);
             }
         }
 

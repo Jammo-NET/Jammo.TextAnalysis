@@ -9,6 +9,8 @@ namespace Jammo.CsAnalysis.CodeInspection.Rules
 {
     public class UnusedFieldInspection : InspectionRule
     {
+        private readonly List<VariableDeclaratorSyntax> fields = new();
+        
         public override InspectionInfo GetInspectionInfo()
         {
             return new InspectionInfo(
@@ -43,6 +45,7 @@ namespace Jammo.CsAnalysis.CodeInspection.Rules
                 .Where(v => v.Value == false))
             {
                 context.CreateInspection(variable.Key, this);
+                fields.Add(variable.Key);
             }
         }
     }

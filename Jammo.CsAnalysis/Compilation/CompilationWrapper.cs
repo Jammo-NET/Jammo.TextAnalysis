@@ -50,14 +50,19 @@ namespace Jammo.CsAnalysis.Compilation
             rawText.Clear();
         }
 
-        public void WithInspector(CodeInspector newInspector)
+        public void SetInspector(CodeInspector newInspector)
         {
             inspector = newInspector;
         }
 
-        internal void CreateInspection(SyntaxNode node, InspectionRule rule)
+        public void CreateInspection(SyntaxNode node, InspectionRule rule)
         {
             inspector.AddInspection(new Inspection(node.ToString(), IndexSpan.FromTextSpan(node.Span), rule));
+        }
+
+        public void CreateInspection(Inspection inspection)
+        {
+            inspector.AddInspection(inspection);
         }
         
         public void GenerateCompilation()

@@ -32,7 +32,7 @@ namespace Jammo.CsAnalysis.CodeInspection
             inspections.AddRange(walker.Result);
         }
 
-        public void WithRules(params IEnumerable<InspectionRule>[] sets)
+        public void AddRules(params IEnumerable<InspectionRule>[] sets)
         {
             foreach (var ruleSet in sets)
                 rules.AddRange(ruleSet);
@@ -93,6 +93,20 @@ namespace Jammo.CsAnalysis.CodeInspection
                 InvokeRule(r => r.TestRecordDeclaration(node, context));
                 
                 base.VisitRecordDeclaration(node);
+            }
+
+            public override void VisitEnumDeclaration(EnumDeclarationSyntax node)
+            {
+                InvokeRule(r => r.TestEnumDeclaration(node, context));
+                
+                base.VisitEnumDeclaration(node);
+            }
+
+            public override void VisitEnumMemberDeclaration(EnumMemberDeclarationSyntax node)
+            {
+                InvokeRule(r => r.TestEnumMemberDeclaration(node, context));
+                
+                base.VisitEnumMemberDeclaration(node);
             }
 
             public override void VisitFieldDeclaration(FieldDeclarationSyntax node)

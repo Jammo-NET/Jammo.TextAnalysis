@@ -10,8 +10,8 @@
         <RepositoryUrl>https://github.com/Jammo-NET/Jammo.CsAnalysis</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>syntax, analysis</PackageTags>
-        <PackageVersion>1.2.4</PackageVersion>
-        <PackageReleaseNotes>CSharpAnalysisWrapepr now only selects .cs files to compile</PackageReleaseNotes>
+        <PackageVersion>1.2.5</PackageVersion>
+        <PackageReleaseNotes>Improved InspectionRules</PackageReleaseNotes>
         <Authors>zeplar exe</Authors>
     </PropertyGroup>
 

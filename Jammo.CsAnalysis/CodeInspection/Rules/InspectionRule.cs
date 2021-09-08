@@ -16,6 +16,9 @@ namespace Jammo.CsAnalysis.CodeInspection.Rules
         public virtual void TestStructDeclaration(StructDeclarationSyntax syntax, CompilationWrapper context) { }
         public virtual void TestInterfaceDeclaration(InterfaceDeclarationSyntax syntax, CompilationWrapper context) { }
         public virtual void TestRecordDeclaration(RecordDeclarationSyntax syntax, CompilationWrapper context) { }
+        public virtual void TestEnumDeclaration(EnumDeclarationSyntax syntax, CompilationWrapper context) { }
+        
+        public virtual void TestEnumMemberDeclaration(EnumMemberDeclarationSyntax syntax, CompilationWrapper context) { }
                        
         public virtual void TestFieldDeclaration(FieldDeclarationSyntax syntax, CompilationWrapper context) { }
         public virtual void TestPropertyDeclaration(PropertyDeclarationSyntax syntax, CompilationWrapper context) { }

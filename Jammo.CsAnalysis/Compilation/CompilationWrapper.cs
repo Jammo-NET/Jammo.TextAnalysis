@@ -64,13 +64,17 @@ namespace Jammo.CsAnalysis.Compilation
         {
             inspector.AddInspection(inspection);
         }
+
+        public void GenerateInspections()
+        {
+            inspector?.Inspect(RawText, this);
+        }
         
         public void GenerateCompilation()
         {
             var trees = rawText.Select(t => CSharpSyntaxTree.ParseText(t));
 
             Compilation = CSharpCompilation.Create($"JAMMO_COMP_{Guid.NewGuid()}", trees.ToArray());
-            inspector?.Inspect(string.Concat(rawText), this);
         }
     }
 }

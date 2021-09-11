@@ -102,8 +102,9 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
         public override string ToString()
         {
             var builder = new StringBuilder();
-            
-            builder.AppendLine(Version.ToFormattedString());
+
+            if (Version != null)
+                builder.AppendLine(Version.ToFormattedString());
             
             foreach (var project in Projects)
                 builder.AppendLine(project.ToFormattedString());

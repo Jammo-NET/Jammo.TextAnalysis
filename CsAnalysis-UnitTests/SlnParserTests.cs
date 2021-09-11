@@ -46,6 +46,28 @@ namespace JammaNalysis_UnitTests
             {
                 Assert.True(testStream.Globals.First().Sections.First().Configurations.First().AssignedConfig == "E");
             }
+
+            [Test]
+            public void TestBasicConfiguration()
+            {
+                var stream = new SolutionStream();
+                var global = new GlobalDefinition();
+                var section = new GlobalSectionDefinition
+                {
+                    ConfigurationType = "SolutionConfigurationPlatforms", RunTime = "preSolution"
+                };
+                
+                section.AddConfiguration(new GlobalConfiguration
+                {
+                    Config = "Debug|Any Cpu",
+                    AssignedConfig = "Debug|Any Cpu"
+                });
+                
+                global.AddSection(section);
+                stream.AddGlobal(global);
+                
+                Console.WriteLine(stream.ToString());
+            }
         }
 
         [TestFixture]

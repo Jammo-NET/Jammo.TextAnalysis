@@ -113,7 +113,20 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
         
         public override string ToFormattedString()
         {
-            return $"{ProjectGlobalGuid}.{Config}.{Type} = {AssignedConfig}";
+            var builder = new StringBuilder();
+
+            if (ProjectGlobalGuid != null)
+                builder.Append($"{ProjectGlobalGuid}.");
+
+            builder.Append(Config);
+
+            if (Type != null)
+                builder.Append($".{Type}");
+
+            if (AssignedConfig != null)
+                builder.Append($" = {AssignedConfig}");
+
+            return builder.ToString();
         }
     }
 }

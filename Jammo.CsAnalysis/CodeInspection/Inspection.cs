@@ -1,4 +1,5 @@
 using Jammo.CsAnalysis.CodeInspection.Rules;
+using Jammo.ParserTools;
 
 namespace Jammo.CsAnalysis.CodeInspection
 {

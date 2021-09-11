@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Jammo.CsAnalysis.CodeInspection;
 using Jammo.CsAnalysis.CodeInspection.Rules;
+using Jammo.ParserTools;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -57,7 +58,7 @@ namespace Jammo.CsAnalysis.Compilation
 
         public void CreateInspection(SyntaxNode node, InspectionRule rule)
         {
-            inspector.AddInspection(new Inspection(node.ToString(), IndexSpan.FromTextSpan(node.Span), rule));
+            inspector.AddInspection(new Inspection(node.ToString(), IndexSpanHelper.FromTextSpan(node.Span), rule));
         }
 
         public void CreateInspection(Inspection inspection)

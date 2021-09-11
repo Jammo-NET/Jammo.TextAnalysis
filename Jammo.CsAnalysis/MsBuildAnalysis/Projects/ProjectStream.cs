@@ -11,11 +11,14 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Projects
     public class ProjectStream : IParserStream, IDisposable
     {
         private FileStream stream;
+        
+        public bool IsInitialized => stream == null;
+        public string FilePath => stream?.Name;
 
         public string Sdk;
         
-        public Dictionary<string, string> Properties = new();
-        public List<ItemGroup> ItemGroups = new();
+        public readonly Dictionary<string, string> Properties = new();
+        public readonly List<ItemGroup> ItemGroups = new();
 
         public void Parse()
         {

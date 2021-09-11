@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Jammo.CsAnalysis.MsBuildAnalysis.Solutions.ParserExtensions;
+using Jammo.ParserTools;
 
 namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
 {
@@ -15,7 +16,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
 
             stateQueue.Insert(0, ParserState.Any);
 
-            var tokenizer = new Tokenizer(text, default);
+            var tokenizer = new Tokenizer(text);
 
             foreach (var token in tokenizer)
             {

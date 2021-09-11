@@ -11,18 +11,15 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
     {
         private FileStream stream;
         
-        private List<ProjectDefinition> projects = new();
-        private List<GlobalDefinition> globals = new();
-        
         public bool IsInitialized => stream == null;
         public string FilePath => stream?.Name;
         
         public FormatVersion Version;
         
-        public ProjectDefinition[] Projects => projects.ToArray();
-        public GlobalDefinition[] Globals => globals.ToArray();
+        public readonly List<ProjectDefinition> Projects = new();
+        public readonly List<GlobalDefinition> Globals = new();
 
-        public GlobalSectionDefinition[] GlobalSections => globals
+        public GlobalSectionDefinition[] GlobalSections => Globals
             .SelectMany(s => s.Sections)
             .ToArray();
         public GlobalConfiguration[] Configurations => GlobalSections
@@ -34,24 +31,28 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
             this.stream = stream;
         }
 
+        [Obsolete("User Projects.Add instead")]
         public void AddProject(ProjectDefinition project)
         {
-            projects.Add(project);
+            Projects.Add(project);
         }
 
+        [Obsolete("Use Projects.Remove instead")]
         public void RemoveProject(string guid)
         {
-            projects.Remove(projects.First(p => p.ProjectGuid == guid));   
+            Projects.Remove(Projects.First(p => p.ProjectGuid == guid));   
         }
 
+        [Obsolete("Use Globals.Add instead")]
         public void AddGlobal(GlobalDefinition global)
         {
-            globals.Add(global);
+            Globals.Add(global);
         }
 
+        [Obsolete("Use Globals.RemoveAt instead")]
         public void RemoveGlobal(int index)
         {
-            globals.RemoveAt(index);
+            Projects.RemoveAt(index);
         }
 
         public void Parse()
@@ -62,8 +63,8 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
             var reader = new StreamReader(stream);
             var data = SolutionParser.Parse(reader.ReadToEndAsync().Result);
 
-            projects = data.projects;
-            globals = data.globals;
+            Projects.AddRange(data.Projects);
+            Globals.AddRange(data.Globals);
             Version = data.Version;
         }
 
@@ -109,7 +110,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
             foreach (var project in Projects)
                 builder.AppendLine(project.ToFormattedString());
 
-            foreach (var global in globals)
+            foreach (var global in Globals)
                 builder.AppendLine(global.ToFormattedString());
 
             return builder.ToString();

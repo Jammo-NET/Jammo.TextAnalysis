@@ -10,19 +10,14 @@
         <RepositoryUrl>https://github.com/Jammo-NET/Jammo.CsAnalysis</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>syntax, analysis</PackageTags>
-        <PackageVersion>1.2.8</PackageVersion>
-        <PackageReleaseNotes>Add null checks to prevent errors and formating issues</PackageReleaseNotes>
+        <PackageVersion>1.2.81</PackageVersion>
+        <PackageReleaseNotes>Add correct object disposals</PackageReleaseNotes>
         <Authors>zeplar exe</Authors>
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Jammo.ParserTools" Version="1.0.0" />
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.11.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="MsBuildAnalysis\Solutions\SolutionParser.Tokenizer.cs">
-        <DependentUpon>SolutionParser.cs</DependentUpon>
-      </Compile>
     </ItemGroup>
 
 </Project>

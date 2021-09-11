@@ -1,10 +1,11 @@
 using System.Text;
+using Jammo.ParserTools;
 
 namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions.ParserExtensions
 {
     internal static class PrivateTokenizerExtensions
     {
-        public static string ReadUntilOrEnd(this SolutionParser.Tokenizer tokenizer, string match)
+        public static string ReadUntilOrEnd(this Tokenizer tokenizer, string match)
         {
             var result = new StringBuilder();
             

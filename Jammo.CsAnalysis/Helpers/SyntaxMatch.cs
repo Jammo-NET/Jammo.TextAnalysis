@@ -1,3 +1,5 @@
+using Jammo.ParserTools;
+
 namespace Jammo.CsAnalysis.Helpers
 {
     public abstract class SyntaxMatch

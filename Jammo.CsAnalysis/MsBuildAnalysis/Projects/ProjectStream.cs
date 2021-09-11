@@ -71,7 +71,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Projects
         
         public void WriteTo(string path)
         {
-            var file = File.Create(path);
+            using var file = File.Create(path);
             using var writer = new StreamWriter(file);
             
             file.SetLength(0);

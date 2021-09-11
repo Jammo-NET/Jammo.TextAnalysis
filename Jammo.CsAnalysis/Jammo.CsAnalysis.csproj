@@ -10,8 +10,8 @@
         <RepositoryUrl>https://github.com/Jammo-NET/Jammo.CsAnalysis</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>syntax, analysis</PackageTags>
-        <PackageVersion>1.2.7</PackageVersion>
-        <PackageReleaseNotes>Add CompilationWrapper.GenerateInspections</PackageReleaseNotes>
+        <PackageVersion>1.2.8</PackageVersion>
+        <PackageReleaseNotes>Add null checks to prevent errors and formating issues</PackageReleaseNotes>
         <Authors>zeplar exe</Authors>
     </PropertyGroup>
 

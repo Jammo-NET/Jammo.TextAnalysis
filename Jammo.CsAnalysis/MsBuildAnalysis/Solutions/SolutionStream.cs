@@ -79,7 +79,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
                 stream = File.Create(Path.Join(Directory.GetCurrentDirectory(), "Jammo_SolutionStream.sln"));
             }
             
-            var writer = new StreamWriter(stream);
+            using var writer = new StreamWriter(stream);
             stream.SetLength(0);
 
             writer.Write(ToString());
@@ -87,7 +87,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
         
         public void WriteTo(string path)
         {
-            var file = File.Create(path);
+            using var file = File.Create(path);
             using var writer = new StreamWriter(file);
             
             file.SetLength(0);

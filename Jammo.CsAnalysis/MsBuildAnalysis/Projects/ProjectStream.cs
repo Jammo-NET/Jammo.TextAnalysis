@@ -63,7 +63,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Projects
                 stream = File.Create(Path.Join(Directory.GetCurrentDirectory(), "Jammo_SolutionStream.sln"));
             }
             
-            var writer = new StreamWriter(stream);
+            using var writer = new StreamWriter(stream);
             stream.SetLength(0);
 
             writer.Write(ToString());

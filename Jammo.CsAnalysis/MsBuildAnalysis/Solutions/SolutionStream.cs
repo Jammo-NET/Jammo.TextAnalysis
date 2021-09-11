@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Jammo.CsAnalysis.MsBuildAnalysis.Projects;
 
 namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
 {
-    public sealed class SolutionStream : IParserStream, IDisposable
+    public sealed class SolutionStream : IParserStream
     {
         private FileStream stream;
         
@@ -60,7 +59,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
             if (stream == null)
                 throw new IOException("Cannot parse an uninitialized file stream");
             
-            var reader = new StreamReader(stream);
+            using var reader = new StreamReader(stream);
             var data = SolutionParser.Parse(reader.ReadToEndAsync().Result);
 
             Projects.AddRange(data.Projects);

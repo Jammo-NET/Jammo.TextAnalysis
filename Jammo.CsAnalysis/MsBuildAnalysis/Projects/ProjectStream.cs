@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace Jammo.CsAnalysis.MsBuildAnalysis.Projects
 {
-    public class ProjectStream : IParserStream, IDisposable
+    public class ProjectStream : IParserStream
     {
         private FileStream stream;
         

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Jammo.CsAnalysis.CodeInspection.Rules;
 using Jammo.CsAnalysis.Compilation;
 using Microsoft.CodeAnalysis;

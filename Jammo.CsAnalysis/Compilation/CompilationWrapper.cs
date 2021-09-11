@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Jammo.CsAnalysis.CodeInspection;
 using Jammo.CsAnalysis.CodeInspection.Rules;
-using Jammo.ParserTools;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 

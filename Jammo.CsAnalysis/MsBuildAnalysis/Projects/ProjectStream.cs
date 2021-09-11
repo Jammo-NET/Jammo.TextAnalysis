@@ -91,51 +91,30 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Projects
 
         public override string ToString()
         {
-            var document = new XDocument();
+            return ToDocument().ToString();
+        }
 
-            return document.ToString();
+        public XDocument ToDocument()
+        {
+            var root = new XElement("Project");
+            root.SetAttributeValue("Sdk", Sdk);
+            
+            root.Add(new XElement(
+                "PropertyGroup", Properties.Select(p => new XElement(p.Key, p.Value))));
+            
+            foreach (var group in ItemGroups)
+                root.Add(group.ToString());
+
+            return new XDocument(root);
         }
     }
 
     public class ItemGroup : Collection<Item>
     {
-        
-    }
-
-    public abstract class Item
-    {
-        public string Update;
-        public string Include;
-        public string Remove;
-
-        public string DependsOn;
-        public OutputDirectoryCopy CopyMode;
-
-        public string Generator;
-        public string CustomToolNamespace;
-        
-        public List<Item> Items;
-
-        public static Item FromElement(XElement element)
+        public XElement ToXElement()
         {
-            Item item = element.Name.ToString() switch
-            {
-                "PackageReference" => new PackageReferenceItem(),
-                "Compile" => new CompileItem(),
-                "None" => new NoneItem(),
-                _ => new UnknownItem()
-            };
-
-            item.Update = element.Attribute("Update")?.Value;
-            item.Include = element.Attribute("Include")?.Value;
-            item.Remove = element.Attribute("Remove")?.Value;
-            
-            item.LoadFromElement(element);
-
-            return item;
+            return new XElement("ItemGroup", this.Select(i => i.ToXElement()));
         }
-
-        public abstract void LoadFromElement(XElement element);
     }
 
     public enum OutputDirectoryCopy
@@ -144,127 +123,5 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Projects
         
         PreserveNewest,
         Always
-    }
-
-    public class UnknownItem : Item
-    {
-        public override void LoadFromElement(XElement element)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class PackageReferenceItem : Item
-    {
-        public string Version;
-        
-        public override void LoadFromElement(XElement element)
-        {
-            Version = element.Attribute("Version")?.Value;
-        }
-    }
-    
-    public class CompileItem : Item
-    {
-        public override void LoadFromElement(XElement element)
-        {
-            
-        }
-    }
-
-    public class ContentItem : Item
-    {
-        public override void LoadFromElement(XElement element)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    
-    public class ResourceItem : Item
-    {
-        public override void LoadFromElement(XElement element)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    
-    public class AppDefinitionItem : Item
-    {
-        public override void LoadFromElement(XElement element)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    
-    public class SpecFlowFeaturesFilesItem : Item
-    {
-        public override void LoadFromElement(XElement element)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    
-    public class OriginalXamlResourceItem : Item
-    {
-        public override void LoadFromElement(XElement element)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    
-    public class CIIncludeItem : Item
-    {
-        public override void LoadFromElement(XElement element)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    
-    public class CICompileItem : Item
-    {
-        public override void LoadFromElement(XElement element)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    
-    public class PageItem : Item
-    {
-        public override void LoadFromElement(XElement element)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    
-    public class InterfaceDefinitionItem : Item
-    {
-        public override void LoadFromElement(XElement element)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    
-    public class TypeScriptCompileItem : Item
-    {
-        public override void LoadFromElement(XElement element)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    
-    public class AdditionalFilesItem : Item
-    {
-        public override void LoadFromElement(XElement element)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    
-    public class NoneItem : Item
-    {
-        public override void LoadFromElement(XElement element)
-        {
-            
-        }
     }
 }

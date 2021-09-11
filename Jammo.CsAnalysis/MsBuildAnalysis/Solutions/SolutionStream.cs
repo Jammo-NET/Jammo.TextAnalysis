@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Jammo.CsAnalysis.MsBuildAnalysis.Projects;
 
 namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
 {
-    public sealed class SolutionStream : IDisposable
+    public sealed class SolutionStream : IParserStream, IDisposable
     {
         private FileStream stream;
         

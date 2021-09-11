@@ -28,8 +28,8 @@ namespace JammaNalysis_UnitTests
                     
                 comp.SetInspector(inspector);
                 comp.GenerateCompilation();
+                comp.GenerateInspections();
                 
-                Console.WriteLine(comp.Inspections.First().Span.Size);
                 Assert.True(comp.Inspections.First().Span.Size == 5);
             }
 
@@ -48,6 +48,7 @@ namespace JammaNalysis_UnitTests
                     
                 comp.SetInspector(inspector);
                 comp.GenerateCompilation();
+                comp.GenerateInspections();
                 
                 Assert.True(comp.Inspections.Count() == 3);
             }
@@ -69,6 +70,7 @@ namespace JammaNalysis_UnitTests
                     
                 comp.SetInspector(inspector);
                 comp.GenerateCompilation();
+                comp.GenerateInspections();
                 
                 Assert.True(comp.Inspections.Count() == 1);
             }

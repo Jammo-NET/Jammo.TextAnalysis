@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Jammo.ParserTools;
 
 namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
 {
@@ -54,6 +55,7 @@ namespace Jammo.CsAnalysis.MsBuildAnalysis.Solutions
             Projects.RemoveAt(index);
         }
 
+        [Obsolete("Use SolutionParser.Parse instead")]
         public void Parse()
         {
             if (stream == null)

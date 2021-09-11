@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Xml.Linq;
+using Jammo.ParserTools;
 
 namespace Jammo.CsAnalysis.MsBuildAnalysis.Projects
 {

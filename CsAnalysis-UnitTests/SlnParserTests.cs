@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using System.Linq;
 using Jammo.CsAnalysis.MsBuildAnalysis.Solutions;
 using NUnit.Framework;

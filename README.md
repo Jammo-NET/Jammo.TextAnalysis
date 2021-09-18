@@ -1,3 +1,3 @@
 # JammaNalysis
 
-.NET Roslyn abstractor, apart of the Jammo family.
+A package meant for analysis of multiple programming languages and file extensions.

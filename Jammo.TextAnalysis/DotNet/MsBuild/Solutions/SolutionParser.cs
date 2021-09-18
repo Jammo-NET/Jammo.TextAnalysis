@@ -128,7 +128,7 @@ namespace Jammo.TextAnalysis.DotNet.MsBuild.Solutions
                             }
                         } while ((projectDefToken = tokenizer.Next()) != null);
 
-                        stream.AddProject(projectDef);
+                        stream.Projects.Add(projectDef);
 
                         break;
                     }
@@ -258,7 +258,7 @@ namespace Jammo.TextAnalysis.DotNet.MsBuild.Solutions
                         }
                         // Parse global sections
 
-                        stream.AddGlobal(globalDef);
+                        stream.Globals.Add(globalDef);
 
                         break;
                     }

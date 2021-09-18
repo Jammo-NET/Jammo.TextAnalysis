@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jammo.CsAnalysis", "Jammo.CsAnalysis\Jammo.CsAnalysis.csproj", "{A6FA2DF1-1E69-4251-9E38-94201E953756}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jammo.TextAnalysis", "Jammo.TextAnalysis\Jammo.TextAnalysis.csproj", "{A6FA2DF1-1E69-4251-9E38-94201E953756}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsAnalysis-UnitTests", "CsAnalysis-UnitTests\CsAnalysis-UnitTests.csproj", "{E0D76A65-7B0D-40DB-8383-51F79748BCBF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileAnalysis-UnitTests", "FileAnalysis-UnitTests\FileAnalysis-UnitTests.csproj", "{E0D76A65-7B0D-40DB-8383-51F79748BCBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

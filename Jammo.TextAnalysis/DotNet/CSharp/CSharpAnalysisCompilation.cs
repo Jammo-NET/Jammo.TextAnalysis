@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Jammo.TextAnalysis.DotNet.CSharp.Inspection;
 using Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules;
@@ -7,20 +8,28 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace Jammo.TextAnalysis.DotNet.CSharp
 {
-    public class CSharpAnalysisCompilation : AnalysisCompilation<CSharpInspection, CSharpInspectionRule, CSharpAnalysisCompilation>
+    public class CSharpAnalysisCompilation : AnalysisCompilation
     {
         public CSharpCompilation Compilation { get; private set; }
         public INamespaceSymbol GlobalNamespace => Compilation?.GlobalNamespace;
-
-        public void CreateInspection(SyntaxNode node, CSharpInspectionRule rule)
+        
+        public IEnumerable<TNode> FindNodes<TNode>(Func<TNode, bool> predicate)
+            where TNode : CSharpSyntaxNode
         {
-            CreateInspection(
-                new CSharpInspection(node.ToString(), IndexSpanHelper.FromTextSpan(node.Span), rule));
+            foreach (var tree in Compilation.SyntaxTrees)
+            {
+                foreach (var node in tree.GetRoot().DescendantNodes().OfType<TNode>())
+                {
+                    if (predicate.Invoke(node))
+                        yield return node;
+                }
+            }
         }
 
-        public override void CreateInspection(CSharpInspection cSharpInspection)
+        public void CreateDiagnostic<TSyntax>(CSharpDiagnostic<TSyntax> diagnostic)
+            where TSyntax : CSharpSyntaxNode
         {
-            InternalInspector.AddInspection(cSharpInspection);
+            InternalInspector.AddInspection(diagnostic);
         }
 
         public override void GenerateInspections()

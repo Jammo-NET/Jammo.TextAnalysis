@@ -1,13 +1,19 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using Jammo.TextAnalysis.Xml.Inspection.Rules;
 
 namespace Jammo.TextAnalysis.Xml.Inspection
 {
-    public class XmlInspector : Inspector<XmlInspection, XmlInspectionRule, XmlAnalysisCompilation>
+    public class XmlInspector : Inspector
     {
-        public override async void Inspect(XmlAnalysisCompilation context)
+        public override void Inspect(AnalysisCompilation context)
+        {
+            Inspect((XmlAnalysisCompilation)context);
+        }
+        
+        public async void Inspect(XmlAnalysisCompilation context)
         {
             var settings = new XmlReaderSettings
             {
@@ -45,7 +51,7 @@ namespace Jammo.TextAnalysis.Xml.Inspection
         
         private void InvokeRule(Action<XmlInspectionRule> factory)
         {
-            foreach (var rule in InternalRules)
+            foreach (var rule in InternalRules.Cast<XmlInspectionRule>())
                 factory.Invoke(rule);
         }
     }

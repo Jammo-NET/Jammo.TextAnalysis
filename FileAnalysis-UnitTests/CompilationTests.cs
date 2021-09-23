@@ -23,7 +23,7 @@ namespace JammaNalysis_UnitTests
                                 "}");
                 
                 var inspector = new CSharpInspector();
-                inspector.AddRules(new[] { new UnusedFieldInspection() });
+                inspector.AddRules(new UnusedFieldInspection());
                     
                 comp.SetInspector(inspector);
                 comp.GenerateInspections();
@@ -36,13 +36,13 @@ namespace JammaNalysis_UnitTests
             {
                 var comp = new CSharpAnalysisCompilation();
             
-                comp.AppendText("public class MyInspectionTest\n" +
-                                "{\n" +
-                                "   private int myVar, myVar2, myVar3;\n" +
+                comp.AppendText("public class MyInspectionTest" +
+                                "{" +
+                                "   private int myVar, myVar2, myVar3;" +
                                 "}");
                 
                 var inspector = new CSharpInspector();
-                inspector.AddRules(new[] { new UnusedFieldInspection() });
+                inspector.AddRules(new UnusedFieldInspection());
                     
                 comp.SetInspector(inspector);
                 comp.GenerateInspections();
@@ -55,15 +55,15 @@ namespace JammaNalysis_UnitTests
             {
                 var comp = new CSharpAnalysisCompilation();
             
-                comp.AppendText("[Flags]\n" +
-                                "public enum MyEnum\n" +
-                                "{\n" +
-                                "   Foo = 1;\n" +
-                                "   OtherFoo = 1<<0\n" +
+                comp.AppendText("[Flags]" +
+                                "public enum MyEnum" +
+                                "{" +
+                                "   Foo = 1;" +
+                                "   OtherFoo = 1<<0" +
                                 "}");
                 
                 var inspector = new CSharpInspector();
-                inspector.AddRules(new[] { new IncorrectFlagInspection() });
+                inspector.AddRules(new IncorrectFlagInspection());
                 
                 comp.SetInspector(inspector);
                 comp.GenerateInspections();

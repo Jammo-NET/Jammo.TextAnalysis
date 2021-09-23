@@ -8,13 +8,18 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection
 {
-    public class CSharpInspector : Inspector<CSharpInspection, CSharpInspectionRule, CSharpAnalysisCompilation>
+    public class CSharpInspector : Inspector
     {
-        public override void Inspect(CSharpAnalysisCompilation context)
+        public override void Inspect(AnalysisCompilation context)
+        {
+            Inspect((CSharpAnalysisCompilation)context);
+        }
+
+        private void Inspect(CSharpAnalysisCompilation context)
         {
             var tree = CSharpSyntaxTree.ParseText(context.RawText);
             var root = tree.GetRoot();
-            var walker = new RuleWalker(InternalRules, context);
+            var walker = new RuleWalker(InternalRules.Cast<CSharpInspectionRule>(), context);
 
             walker.Visit(root);
         }

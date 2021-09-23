@@ -5,9 +5,9 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules
 {
     public class IncorrectFlagInspection : CSharpInspectionRule
     {
-        public override InspectionInfo GetInspectionInfo()
+        public override DiagnosticInfo GetInspectionInfo()
         {
-            return new InspectionInfo(
+            return new DiagnosticInfo(
                 "JAMMO_0002",
                 "IncorrectFlagInspection",
                 "This flag enumeration has incorrect indices");
@@ -28,8 +28,18 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules
                     continue;
 
                 if (int.TryParse(value, out var intValue) && intValue % 2 != 0)
-                    context.CreateInspection(member, this);
+                    context.CreateDiagnostic(new IncorrectFlagDiagnostic(member, this));
             }
+        }
+    }
+
+    public class IncorrectFlagDiagnostic : CSharpDiagnostic<EnumMemberDeclarationSyntax>
+    {
+        public IncorrectFlagDiagnostic(EnumMemberDeclarationSyntax syntax, CSharpInspectionRule rule) : base(syntax, rule) { }
+
+        public override void Fix(CSharpAnalysisCompilation context)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

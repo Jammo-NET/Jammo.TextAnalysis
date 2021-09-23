@@ -4,14 +4,14 @@ using Jammo.TextAnalysis.Xml.Inspection.Rules;
 
 namespace Jammo.TextAnalysis.Xml
 {
-    public class XmlAnalysisCompilation : AnalysisCompilation<XmlInspection, XmlInspectionRule, XmlAnalysisCompilation>
+    public class XmlAnalysisCompilation : AnalysisCompilation
     {
         public XDocument Document { get; private set; }
         public XElement Root => Document.Root;
         
-        public override void CreateInspection(XmlInspection inspection)
+        public void CreateInspection(XmlDiagnostic diagnostic)
         {
-            InternalInspector.AddInspection(inspection);
+            InternalInspector.AddInspection(diagnostic);
         }
 
         public override void GenerateInspections()

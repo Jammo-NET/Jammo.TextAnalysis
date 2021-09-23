@@ -2,27 +2,34 @@ using System.Collections.Generic;
 
 namespace Jammo.TextAnalysis
 {
-    public abstract class Inspector<TInspection, TInspectionRule, TAnalysisCompilation>
-        where TInspection : Inspection<TInspectionRule>
-        where TInspectionRule : InspectionRule
-        where TAnalysisCompilation : AnalysisCompilationBase
+    public abstract class Inspector
     {
-        protected readonly List<TInspectionRule> InternalRules = new();
-        protected readonly List<TInspection> InternalInspections = new();
+        protected readonly List<InspectionRule> InternalRules = new();
+        protected readonly List<Diagnostic> InternalInspections = new();
         
-        public IEnumerable<TInspection> Inspections => InternalInspections;
+        public IEnumerable<Diagnostic> Inspections => InternalInspections;
         
-        public void AddInspection(TInspection cSharpInspection)
+        public void AddInspection(Diagnostic diagnostic)
         {
-            InternalInspections.Add(cSharpInspection);
+            InternalInspections.Add(diagnostic);
         }
 
-        public abstract void Inspect(TAnalysisCompilation context);
+        public abstract void Inspect(AnalysisCompilation context);
 
-        public void AddRules(params IEnumerable<TInspectionRule>[] sets)
+        public void AddRule(InspectionRule rule)
+        {
+            InternalRules.Add(rule);
+        }
+
+        public void AddRules(params InspectionRule[] rules)
+        {
+            InternalRules.AddRange(rules);
+        }
+
+        public void AddRules(params IEnumerable<InspectionRule>[] sets)
         {
             foreach (var ruleSet in sets)
-                InternalRules.AddRange(ruleSet);
+                AddRules(ruleSet);
         }
     }
 }

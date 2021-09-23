@@ -1,5 +1,4 @@
 using System.Xml.Linq;
-using Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules;
 
 namespace Jammo.TextAnalysis.Xml.Inspection.Rules
 {

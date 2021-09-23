@@ -2,18 +2,18 @@ using Jammo.ParserTools;
 
 namespace Jammo.TextAnalysis
 {
-    public abstract class Inspection<TInspectionRule>
+    public abstract class Diagnostic
     {
         protected readonly string InternalRawText;
         public readonly IndexSpan Span;
-        
-        public readonly TInspectionRule Rule;
 
-        protected Inspection(string rawText, IndexSpan span, TInspectionRule rule)
+        public readonly DiagnosticInfo Info;
+
+        protected Diagnostic(string rawText, IndexSpan span, InspectionRule rule)
         {
             InternalRawText = rawText;
             Span = span;
-            Rule = rule;
+            Info = rule.GetInspectionInfo();
         }
 
         public override string ToString()

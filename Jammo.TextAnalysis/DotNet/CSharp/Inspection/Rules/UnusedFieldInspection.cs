@@ -6,11 +6,9 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules
 {
     public class UnusedFieldInspection : CSharpInspectionRule
     {
-        private readonly List<VariableDeclaratorSyntax> fields = new();
-        
-        public override InspectionInfo GetInspectionInfo()
+        public override DiagnosticInfo GetInspectionInfo()
         {
-            return new InspectionInfo(
+            return new DiagnosticInfo(
                 "JAMMO_0001",
                 "UnusedFieldInspection", 
                 "Field is never used within the target compilation.");
@@ -18,32 +16,26 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules
 
         public override void TestFieldDeclaration(FieldDeclarationSyntax syntax, CSharpAnalysisCompilation context)
         {
-            var matchedVars = new Dictionary<VariableDeclaratorSyntax, bool>();
-
             foreach (var variable in syntax.Declaration.Variables)
-                matchedVars[variable] = false;
-            
-            foreach (var tree in context.Compilation.SyntaxTrees)
             {
-                foreach (var node in tree.GetRoot().DescendantNodes().OfType<IdentifierNameSyntax>())
+                var nodes = context
+                    .FindNodes<IdentifierNameSyntax>(n => variable.ToString() == n.Identifier.ToString());
+
+                if (!nodes.Any())
                 {
-                    foreach (var variable in matchedVars)
-                    {
-                        if (matchedVars.All(k => k.Value))
-                            return;
-                        
-                        if (variable.ToString() == node.Identifier.Text)
-                            matchedVars[variable.Key] = true;
-                    }
+                    context.CreateDiagnostic(new UnusedFieldDiagnostic(variable, this));
                 }
             }
-
-            foreach (var variable in matchedVars
-                .Where(v => v.Value == false))
-            {
-                context.CreateInspection(variable.Key, this);
-                fields.Add(variable.Key);
-            }
+        }
+    }
+    
+    public class UnusedFieldDiagnostic : CSharpDiagnostic<VariableDeclaratorSyntax>
+    {
+        public UnusedFieldDiagnostic(VariableDeclaratorSyntax syntax, CSharpInspectionRule rule) : base(syntax, rule) { }
+        
+        public override void Fix(CSharpAnalysisCompilation context)
+        {
+            
         }
     }
 }

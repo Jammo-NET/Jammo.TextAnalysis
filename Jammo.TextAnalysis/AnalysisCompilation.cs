@@ -1,22 +1,18 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Jammo.TextAnalysis
 {
-    public abstract class AnalysisCompilationBase { }
-    
-    public abstract class AnalysisCompilation<TInspection, TInspectionRule, TAnalysisCompilation> : AnalysisCompilationBase
-        where TInspection : Inspection<TInspectionRule>
-        where TInspectionRule : InspectionRule
-        where TAnalysisCompilation : AnalysisCompilationBase
+    public abstract class AnalysisCompilation
     {
         protected readonly List<string> InternalRawText = new();
-        protected Inspector<TInspection, TInspectionRule, TAnalysisCompilation>
-            InternalInspector;
+        protected Inspector InternalInspector;
 
-        public IEnumerable<TInspection> Inspections => InternalInspector?.Inspections;
+        public IEnumerable<Diagnostic> Inspections => InternalInspector?.Inspections;
         
-        public string RawText => string.Join('\n', InternalRawText);
+        public string RawText => string.Join(Environment.NewLine, InternalRawText);
         
         public void AppendFile(FileInfo file)
         {
@@ -48,13 +44,10 @@ namespace Jammo.TextAnalysis
             InternalRawText.Clear();
         }
 
-        public void SetInspector(Inspector<TInspection, TInspectionRule, TAnalysisCompilation> 
-            newInspector)
+        public void SetInspector(Inspector inspector)
         {
-            InternalInspector = newInspector;
+            InternalInspector = inspector;
         }
-
-        public abstract void CreateInspection(TInspection inspection);
 
         public abstract void GenerateInspections();
 

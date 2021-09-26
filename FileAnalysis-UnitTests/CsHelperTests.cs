@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using Jammo.TextAnalysis;
 using Jammo.TextAnalysis.DotNet.CSharp.Helpers;
 using NUnit.Framework;
 

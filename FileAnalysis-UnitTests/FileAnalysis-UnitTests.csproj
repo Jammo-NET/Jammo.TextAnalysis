@@ -5,6 +5,8 @@
         <RootNamespace>JammaNalysis_UnitTests</RootNamespace>
 
         <IsPackable>false</IsPackable>
+
+        <LangVersion>9</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>

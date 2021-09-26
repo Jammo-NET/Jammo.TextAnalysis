@@ -6,14 +6,9 @@ using Jammo.TextAnalysis.Xml.Inspection.Rules;
 
 namespace Jammo.TextAnalysis.Xml.Inspection
 {
-    public class XmlInspector : Inspector
+    public class XmlInspector : Inspector<XmlInspectionRule, XmlDiagnostic, XmlAnalysisCompilation>
     {
-        public override void Inspect(AnalysisCompilation context)
-        {
-            Inspect((XmlAnalysisCompilation)context);
-        }
-        
-        public async void Inspect(XmlAnalysisCompilation context)
+        public override async void Inspect(XmlAnalysisCompilation context)
         {
             var settings = new XmlReaderSettings
             {

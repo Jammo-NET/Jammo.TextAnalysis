@@ -14,7 +14,7 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules
                 "Field is never used within the target compilation.");
         }
 
-        public override void TestFieldDeclaration(FieldDeclarationSyntax syntax, CSharpAnalysisCompilation context)
+        public override IEnumerable<CSharpDiagnostic> TestFieldDeclaration(FieldDeclarationSyntax syntax, CSharpAnalysisCompilation context)
         {
             foreach (var variable in syntax.Declaration.Variables)
             {
@@ -23,13 +23,13 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules
 
                 if (!nodes.Any())
                 {
-                    context.CreateDiagnostic(new UnusedFieldDiagnostic(variable, this));
+                    yield return new UnusedFieldDiagnostic(variable, this);
                 }
             }
         }
     }
     
-    public class UnusedFieldDiagnostic : CSharpDiagnostic<VariableDeclaratorSyntax>
+    public class UnusedFieldDiagnostic : CSharpDiagnostic
     {
         public UnusedFieldDiagnostic(VariableDeclaratorSyntax syntax, CSharpInspectionRule rule) : base(syntax, rule) { }
         

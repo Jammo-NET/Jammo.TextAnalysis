@@ -8,26 +8,25 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection
 {
-    public class CSharpInspector : Inspector
+    public class CSharpInspector : Inspector<CSharpInspectionRule, CSharpDiagnostic, CSharpAnalysisCompilation>
     {
-        public override void Inspect(AnalysisCompilation context)
-        {
-            Inspect((CSharpAnalysisCompilation)context);
-        }
-
-        private void Inspect(CSharpAnalysisCompilation context)
+        public override void Inspect(CSharpAnalysisCompilation context)
         {
             var tree = CSharpSyntaxTree.ParseText(context.RawText);
             var root = tree.GetRoot();
-            var walker = new RuleWalker(InternalRules.Cast<CSharpInspectionRule>(), context);
+            var walker = new RuleWalker(InternalRules, context);
 
             walker.Visit(root);
+            
+            InternalDiagnostics.AddRange(walker.Result);
         }
 
         private class RuleWalker : CSharpSyntaxWalker
         {
             private readonly CSharpAnalysisCompilation context;
             private readonly IEnumerable<CSharpInspectionRule> rules;
+
+            public List<CSharpDiagnostic> Result { get; } = new();
 
             public RuleWalker(IEnumerable<CSharpInspectionRule> rules, CSharpAnalysisCompilation context) : base(SyntaxWalkerDepth.Trivia)
             {
@@ -142,7 +141,7 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection
 
             public override void VisitExpressionStatement(ExpressionStatementSyntax node)
             {
-                Action<CSharpInspectionRule> flag;
+                Func<CSharpInspectionRule, IEnumerable<CSharpDiagnostic>> flag;
 
                 switch (node.Kind())
                 {
@@ -178,7 +177,7 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection
 
             public override void VisitLiteralExpression(LiteralExpressionSyntax node)
             {
-                Action<CSharpInspectionRule> flag;
+                Func<CSharpInspectionRule, IEnumerable<CSharpDiagnostic>> flag;
 
                 switch (node.Kind())
                 {
@@ -199,7 +198,7 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection
 
             public override void VisitTrivia(SyntaxTrivia trivia)
             {
-                Action<CSharpInspectionRule> flag;
+                Func<CSharpInspectionRule, IEnumerable<CSharpDiagnostic>> flag;
 
                 switch (trivia.Kind())
                 {
@@ -224,10 +223,10 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection
                 base.VisitTrivia(trivia);
             }
             
-            private void InvokeRule(Action<CSharpInspectionRule> factory)
+            private void InvokeRule(Func<CSharpInspectionRule, IEnumerable<CSharpDiagnostic>> factory)
             {
                 foreach (var rule in rules)
-                    factory.Invoke(rule);
+                    Result.AddRange(factory?.Invoke(rule) ?? Enumerable.Empty<CSharpDiagnostic>());
             }
         }
     }

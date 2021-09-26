@@ -1,7 +1,10 @@
+using System;
 using System.Linq;
+using Jammo.TextAnalysis;
 using Jammo.TextAnalysis.DotNet.CSharp;
 using Jammo.TextAnalysis.DotNet.CSharp.Inspection;
 using Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules;
+using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
 
 namespace JammaNalysis_UnitTests
@@ -17,18 +20,19 @@ namespace JammaNalysis_UnitTests
             {
                 var comp = new CSharpAnalysisCompilation();
             
-                comp.AppendText("public class MyInspectionTest" +
+                comp.AppendText(new MultiLineString() +
+                                "public class MyInspectionTest" +
                                 "{" +
                                 "   private int myVar;" +
                                 "}");
                 
                 var inspector = new CSharpInspector();
                 inspector.AddRules(new UnusedFieldInspection());
-                    
-                comp.SetInspector(inspector);
-                comp.GenerateInspections();
                 
-                Assert.True(comp.Inspections.First().Span.Size == 5);
+                comp.GenerateCompilation();
+                inspector.Inspect(comp);
+                
+                Assert.True(inspector.Diagnostics.First().Span.Size == 5);
             }
 
             [Test]
@@ -36,18 +40,19 @@ namespace JammaNalysis_UnitTests
             {
                 var comp = new CSharpAnalysisCompilation();
             
-                comp.AppendText("public class MyInspectionTest" +
+                comp.AppendText(new MultiLineString() +
+                                "public class MyInspectionTest" +
                                 "{" +
                                 "   private int myVar, myVar2, myVar3;" +
                                 "}");
                 
                 var inspector = new CSharpInspector();
                 inspector.AddRules(new UnusedFieldInspection());
-                    
-                comp.SetInspector(inspector);
-                comp.GenerateInspections();
                 
-                Assert.True(comp.Inspections.Count() == 3);
+                comp.GenerateCompilation();
+                inspector.Inspect(comp);
+                
+                Assert.True(inspector.Diagnostics.Count() == 3);
             }
 
             [Test]
@@ -55,20 +60,21 @@ namespace JammaNalysis_UnitTests
             {
                 var comp = new CSharpAnalysisCompilation();
             
-                comp.AppendText("[Flags]" +
+                comp.AppendText(new MultiLineString() +
+                                "[Flags]" +
                                 "public enum MyEnum" +
                                 "{" +
                                 "   Foo = 1;" +
                                 "   OtherFoo = 1<<0" +
                                 "}");
-                
+
                 var inspector = new CSharpInspector();
                 inspector.AddRules(new IncorrectFlagInspection());
+
+                comp.GenerateCompilation();
+                inspector.Inspect(comp);
                 
-                comp.SetInspector(inspector);
-                comp.GenerateInspections();
-                
-                Assert.True(comp.Inspections.Count() == 1);
+                Assert.True(inspector.Diagnostics.Count() == 1);
             }
         }
 

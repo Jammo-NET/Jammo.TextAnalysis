@@ -10,8 +10,9 @@
         <RepositoryUrl>https://github.com/Jammo-NET/Jammo.TextAnalysis</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>syntax, analysis</PackageTags>
-        <PackageVersion>2.0</PackageVersion>
-        <PackageReleaseNotes>Complete overhaul, old package here: https://www.nuget.org/packages/Jammo.CsAnalysis/</PackageReleaseNotes>
+        <PackageVersion>2.1</PackageVersion>
+        <PackageReleaseNotes>Remove Inspector from AnalysisCompilation, manipulated to work on its own while accepting an AnalysisCompilation to inspect
+CSharpInspectionRule methods now return an IEnumerable&lt;CSharpDiagnostic&gt;</PackageReleaseNotes>
         <Authors>zeplar exe</Authors>
     </PropertyGroup>
 

@@ -75,11 +75,13 @@ namespace Jammo.TextAnalysis.DotNet.MsBuild.Projects
         
         public void WriteTo(string path)
         {
-            using var file = File.Create(path);
+            var file = File.Create(path);
             using var writer = new StreamWriter(file);
             
             file.SetLength(0);
             writer.Write(ToString());
+
+            stream = file;
         }
 
         public IEnumerable<Item> CompiledFiles =>

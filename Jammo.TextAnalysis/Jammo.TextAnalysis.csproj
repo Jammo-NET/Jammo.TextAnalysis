@@ -10,9 +10,8 @@
         <RepositoryUrl>https://github.com/Jammo-NET/Jammo.TextAnalysis</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>syntax, analysis</PackageTags>
-        <PackageVersion>2.1</PackageVersion>
-        <PackageReleaseNotes>Remove Inspector from AnalysisCompilation, manipulated to work on its own while accepting an AnalysisCompilation to inspect
-CSharpInspectionRule methods now return an IEnumerable&lt;CSharpDiagnostic&gt;</PackageReleaseNotes>
+        <PackageVersion>2.1.1</PackageVersion>
+        <PackageReleaseNotes>SolutionStream and ProjectStream now update their internal FileStream in WriteTo</PackageReleaseNotes>
         <Authors>zeplar exe</Authors>
     </PropertyGroup>
 

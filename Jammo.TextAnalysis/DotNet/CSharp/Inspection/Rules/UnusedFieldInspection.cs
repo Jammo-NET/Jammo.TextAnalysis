@@ -33,9 +33,9 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules
     {
         public UnusedFieldDiagnostic(VariableDeclaratorSyntax syntax, CSharpInspectionRule rule) : base(syntax, rule) { }
         
-        public override void Fix(CSharpAnalysisCompilation context)
+        public override IEnumerable<CSharpDiagnosticFix> Fix(CSharpAnalysisCompilation context)
         {
-            
+            yield break;
         }
     }
 }

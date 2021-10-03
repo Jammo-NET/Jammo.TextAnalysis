@@ -1,18 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Jammo.TextAnalysis.DotNet.CSharp.Inspection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
 namespace Jammo.TextAnalysis.DotNet.CSharp
 {
-    public class CSharpAnalysisCompilation : AnalysisCompilation
+    public class CSharpAnalysisCompilation : FileAnalysisCompilation
     {
-        public CSharpCompilation Compilation { get; private set; }
+        public IEnumerable<CSharpSyntaxTree> Trees => 
+            InternalFullRawText.Select(t => (CSharpSyntaxTree)CSharpSyntaxTree.ParseText(t));
+
+        public CSharpCompilation Compilation { get; protected set; }
         public INamespaceSymbol GlobalNamespace => Compilation?.GlobalNamespace;
         
-        public IEnumerable<TNode> FindNodes<TNode>(Func<TNode, bool> predicate)
+        public virtual IEnumerable<TNode> FindNodes<TNode>(Func<TNode, bool> predicate)
             where TNode : CSharpSyntaxNode
         {
             foreach (var tree in Compilation.SyntaxTrees)
@@ -27,9 +29,7 @@ namespace Jammo.TextAnalysis.DotNet.CSharp
 
         public override void GenerateCompilation()
         {
-            var trees = InternalRawText.Select(t => CSharpSyntaxTree.ParseText(t));
-
-            Compilation = CSharpCompilation.Create($"JAMMO_COMP_{Guid.NewGuid()}", trees.ToArray());
+            Compilation = CSharpCompilation.Create($"JAMMO_COMP_{Guid.NewGuid()}", Trees);
         }
     }
 }

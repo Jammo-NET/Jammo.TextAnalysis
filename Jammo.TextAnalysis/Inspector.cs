@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Jammo.TextAnalysis
@@ -11,7 +12,7 @@ namespace Jammo.TextAnalysis
         protected readonly List<TDiagnostic> InternalDiagnostics = new();
         
         public IEnumerable<TDiagnostic> Diagnostics => InternalDiagnostics;
-        
+
         public void AddDiagnostic(TDiagnostic diagnostic)
         {
             InternalDiagnostics.Add(diagnostic);

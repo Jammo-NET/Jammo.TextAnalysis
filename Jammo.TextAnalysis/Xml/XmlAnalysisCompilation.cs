@@ -1,9 +1,8 @@
 using System.Xml.Linq;
-using Jammo.TextAnalysis.Xml.Inspection;
 
 namespace Jammo.TextAnalysis.Xml
 {
-    public class XmlAnalysisCompilation : AnalysisCompilation
+    public class XmlAnalysisCompilation : FileAnalysisCompilation
     {
         public XDocument Document { get; private set; }
         public XElement Root => Document.Root;

@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Jammo.ParserTools;
 
 namespace Jammo.TextAnalysis
@@ -5,8 +7,8 @@ namespace Jammo.TextAnalysis
     public abstract class Diagnostic
     {
         protected readonly string InternalRawText;
+        
         public readonly IndexSpan Span;
-
         public readonly DiagnosticInfo Info;
 
         protected Diagnostic(string rawText, IndexSpan span, InspectionRule rule)

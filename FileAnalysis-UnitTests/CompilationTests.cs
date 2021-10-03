@@ -1,10 +1,7 @@
-using System;
 using System.Linq;
-using Jammo.TextAnalysis;
 using Jammo.TextAnalysis.DotNet.CSharp;
 using Jammo.TextAnalysis.DotNet.CSharp.Inspection;
 using Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules;
-using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
 
 namespace JammaNalysis_UnitTests

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Jammo.TextAnalysis.DotNet.MsBuild
 {
@@ -26,12 +27,15 @@ namespace Jammo.TextAnalysis.DotNet.MsBuild
         
         public IEnumerable<ProjectFile> EnumerateFiles()
         {
-            yield break;
+            return EnumerateDirectories().SelectMany(directory => directory.EnumerateFiles());
         }
         
         public IEnumerable<ProjectDirectory> EnumerateDirectories()
         {
             yield return TopLevel;
+
+            foreach (var nestedDir in TopLevel.EnumerateDirectories())
+                yield return nestedDir;
         }
     }
 }

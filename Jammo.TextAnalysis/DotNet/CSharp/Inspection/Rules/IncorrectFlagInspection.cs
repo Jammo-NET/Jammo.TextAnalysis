@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -29,7 +30,7 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules
                 
                 if (value == null)
                     continue;
-
+                
                 if (int.TryParse(value, out var intValue) && intValue % 2 != 0)
                 {
                     yield return new IncorrectFlagDiagnostic(syntax, this);
@@ -43,18 +44,22 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules
     {
         public IncorrectFlagDiagnostic(EnumDeclarationSyntax syntax, CSharpInspectionRule rule) : base(syntax, rule) { }
 
-        public override void Fix(CSharpAnalysisCompilation context)
+        public override IEnumerable<CSharpDiagnosticFix> Fix(CSharpAnalysisCompilation context)
         {
             var syntax = (EnumDeclarationSyntax)Syntax;
             var power = 0;
-            // TODO: wow this is bad
+
+            var members = new SeparatedSyntaxList<EnumMemberDeclarationSyntax>();
+            
             foreach (var member in syntax.Members)
             {
-                member.Parent?
-                    .ReplaceNode(member, member
-                        .WithEqualsValue(
-                            SyntaxFactory.EqualsValueClause(SyntaxFactory.ParseExpression($"1<<{power++}"))));
+                members.Add(member.WithEqualsValue(
+                        SyntaxFactory.EqualsValueClause(SyntaxFactory.ParseExpression($"1<<{power++}"))));
             }
+
+            var newSyntax = syntax.WithMembers(members);
+
+            yield return new CSharpDiagnosticFix(IndexSpanHelper.FromTextSpan(syntax.Span), newSyntax.ToFullString());
         }
     }
 }

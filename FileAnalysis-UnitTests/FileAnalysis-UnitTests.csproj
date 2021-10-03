@@ -24,4 +24,20 @@
       <ProjectReference Include="..\Jammo.TextAnalysis\Jammo.TextAnalysis.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="CSharpTest.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="project-test\CSharpTest.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="project-test\test.csproj">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

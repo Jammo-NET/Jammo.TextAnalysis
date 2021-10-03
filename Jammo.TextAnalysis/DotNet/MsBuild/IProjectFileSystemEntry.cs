@@ -68,12 +68,18 @@ namespace Jammo.TextAnalysis.DotNet.MsBuild
 
         public IEnumerable<ProjectFile> EnumerateFiles()
         {
-            return Children.OfType<ProjectFile>();
+            return EnumerateDirectories().SelectMany(directory => directory.EnumerateFiles());
         }
 
         public IEnumerable<ProjectDirectory> EnumerateDirectories()
         {
-            return Children.OfType<ProjectDirectory>();
+            foreach (var dir in Children.OfType<ProjectDirectory>())
+            {
+                yield return dir;
+                
+                foreach (var nestedDir in dir.EnumerateDirectories())
+                    yield return nestedDir;
+            }
         }
     }
 

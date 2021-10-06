@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules.Diagnostics;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules
@@ -26,16 +27,6 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules
                     yield return new UnusedFieldDiagnostic(variable, this);
                 }
             }
-        }
-    }
-    
-    public class UnusedFieldDiagnostic : CSharpDiagnostic
-    {
-        public UnusedFieldDiagnostic(VariableDeclaratorSyntax syntax, CSharpInspectionRule rule) : base(syntax, rule) { }
-        
-        public override IEnumerable<CSharpDiagnosticFix> Fix(CSharpAnalysisCompilation context)
-        {
-            yield break;
         }
     }
 }

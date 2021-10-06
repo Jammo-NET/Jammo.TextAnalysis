@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection
 {
@@ -20,7 +15,7 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection
             {
                 walker.Visit(document.SyntaxTree.GetRoot());
                 
-                document.Diagnostics.AddRange(walker.Result);
+                document.AddDiagnostics(walker.Result);
                 InternalDiagnostics.AddRange(walker.Result);
                 
                 walker.ClearResult();

@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 using Jammo.TextAnalysis.DotNet.CSharp;
@@ -24,9 +23,10 @@ namespace JammaNalysis_UnitTests
             
             var inspector = new CSharpProjectInspector();
             inspector.AddRule(new IncorrectFlagInspection());
+            
             inspector.Inspect(compilation);
 
-            Assert.True(compilation.Documents.First().Diagnostics.Count == 1);
+            Assert.True(compilation.Documents.First().Diagnostics.Count() == 1);
         }
     }
 }

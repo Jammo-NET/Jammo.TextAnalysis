@@ -54,8 +54,7 @@ namespace Jammo.TextAnalysis.DotNet.MsBuild.Solutions
         {
             Projects.RemoveAt(index);
         }
-
-        [Obsolete("Use SolutionParser.Parse instead")]
+        
         public void Parse()
         {
             if (stream == null)

@@ -10,8 +10,25 @@
         <RepositoryUrl>https://github.com/Jammo-NET/Jammo.TextAnalysis</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>syntax, analysis</PackageTags>
-        <PackageVersion>2.1.1</PackageVersion>
-        <PackageReleaseNotes>SolutionStream and ProjectStream now update their internal FileStream in WriteTo</PackageReleaseNotes>
+        <PackageVersion>2.2.0</PackageVersion>
+        <PackageReleaseNotes>- Additions
+FileAnalysisCompilation
+CSharpAnalysisCompilationHelper
+CSharpProjectInspector
+CSharpDocument
+
+- Changes
+CSharpAnalysisCompilationHelper now returns a CSharpProjectAnalysisCompilation instead of a compilation with multiple files
+ProjectFileSystem.EnumerateFiles now returns every file in the tree from the specified element, the same goes for EnumerateDirectories
+CSharpDiagnosticFix moved to DotNet/CSharp/Inspection
+
+- Fixes
+...
+
+- Removals
+...
+
+Summary: Add a new compilation type, CSharpProjectAnalysisCompilation. As its name explains, this compilation is used to analyze .csproj files. Diagnostics are stored within CSharpDocuments (wrappers for .cs files).</PackageReleaseNotes>
         <Authors>zeplar exe</Authors>
     </PropertyGroup>
 

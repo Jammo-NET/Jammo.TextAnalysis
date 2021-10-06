@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules;
 using Microsoft.CodeAnalysis.CSharp;

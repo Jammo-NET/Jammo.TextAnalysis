@@ -15,7 +15,8 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection
 
         public List<CSharpDiagnostic> Result { get; } = new();
 
-        public RuleWalker(IEnumerable<CSharpInspectionRule> rules, CSharpAnalysisCompilation context) : base(SyntaxWalkerDepth.Trivia)
+        public RuleWalker(IEnumerable<CSharpInspectionRule> rules, CSharpAnalysisCompilation context) :
+            base(SyntaxWalkerDepth.Trivia)
         {
             this.rules = rules;
             this.context = context;

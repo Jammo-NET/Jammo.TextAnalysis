@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using Jammo.ParserTools;
 
 namespace Jammo.TextAnalysis

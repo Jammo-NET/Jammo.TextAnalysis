@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Jammo.TextAnalysis
 {
@@ -25,7 +24,5 @@ namespace Jammo.TextAnalysis
         {
             InternalRawText.Clear();
         }
-
-        public abstract void GenerateCompilation();
     }
 }

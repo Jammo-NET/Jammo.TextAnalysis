@@ -7,7 +7,7 @@ namespace Jammo.TextAnalysis.Xml
         public XDocument Document { get; private set; }
         public XElement Root => Document.Root;
 
-        public override void GenerateCompilation()
+        public virtual void GenerateDocument()
         {
             Document = XDocument.Parse(RawText);
         }

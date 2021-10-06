@@ -27,7 +27,7 @@ namespace Jammo.TextAnalysis.DotNet.CSharp
             }
         }
 
-        public override void GenerateCompilation()
+        public virtual void GenerateCompilation()
         {
             Compilation = CSharpCompilation.Create($"JAMMO_COMP_{Guid.NewGuid()}", Trees);
         }

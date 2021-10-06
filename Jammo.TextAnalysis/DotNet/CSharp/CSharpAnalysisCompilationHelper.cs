@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Jammo.TextAnalysis.DotNet.MsBuild;
-using Jammo.TextAnalysis.DotNet.MsBuild.Solutions;
 
 namespace Jammo.TextAnalysis.DotNet.CSharp
 {

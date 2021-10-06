@@ -1,11 +1,14 @@
 using System;
 
-public class CSharpTest
+namespace JammaNalysis_UnitTests.project_test
 {
-    [Flags]
-    public enum MyEnum
+    public class CSharpTest
     {
-        SomeValue = 1,
-        OtherValue = 2
+        [Flags]
+        public enum MyEnum
+        {
+            SomeValue = 1,
+            OtherValue = 2
+        }
     }
 }

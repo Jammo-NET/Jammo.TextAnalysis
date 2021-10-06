@@ -1,15 +1,13 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection
 {
     public class CSharpInspector : Inspector<CSharpInspectionRule, CSharpDiagnostic, CSharpAnalysisCompilation>
     {
+        private readonly List<Microsoft.CodeAnalysis.Diagnostic> compilationDiagnostics = new();
+        public IEnumerable<Microsoft.CodeAnalysis.Diagnostic> CompilationDiagnostics => compilationDiagnostics;
+
         public override void Inspect(CSharpAnalysisCompilation context)
         {
             InternalDiagnostics.Clear();
@@ -17,8 +15,13 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection
             var walker = new RuleWalker(InternalRules, context);
 
             foreach (var tree in context.Trees)
-                walker.Visit(tree.GetRoot());
-            
+            {
+                var root = tree.GetCompilationUnitRoot();
+                compilationDiagnostics.AddRange(root.GetDiagnostics());
+                
+                walker.Visit(root);
+            }
+
             InternalDiagnostics.AddRange(walker.Result);
         }
     }

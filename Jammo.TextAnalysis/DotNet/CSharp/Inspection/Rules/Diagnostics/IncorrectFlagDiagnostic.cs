@@ -9,7 +9,7 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules.Diagnostics
     {
         public IncorrectFlagDiagnostic(EnumDeclarationSyntax syntax, CSharpInspectionRule rule) : base(syntax, rule) { }
 
-        public override IEnumerable<CSharpDiagnosticFix> Fix(CSharpAnalysisCompilation context)
+        public override IEnumerable<DiagnosticFix> Fix(CSharpAnalysisCompilation context)
         {
             var syntax = (EnumDeclarationSyntax)Syntax;
             var power = 0;
@@ -24,7 +24,7 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules.Diagnostics
 
             var newSyntax = syntax.WithMembers(members);
 
-            yield return new CSharpDiagnosticFix(IndexSpanHelper.FromTextSpan(syntax.Span), newSyntax.ToFullString());
+            yield return new DiagnosticFix(IndexSpanHelper.FromTextSpan(syntax.Span), newSyntax.ToFullString());
         }
     }
 }

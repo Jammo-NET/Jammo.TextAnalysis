@@ -7,7 +7,7 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection.Rules.Diagnostics
     {
         public UnusedFieldDiagnostic(VariableDeclaratorSyntax syntax, CSharpInspectionRule rule) : base(syntax, rule) { }
         
-        public override IEnumerable<CSharpDiagnosticFix> Fix(CSharpAnalysisCompilation context)
+        public override IEnumerable<DiagnosticFix> Fix(CSharpAnalysisCompilation context)
         {
             yield break;
         }

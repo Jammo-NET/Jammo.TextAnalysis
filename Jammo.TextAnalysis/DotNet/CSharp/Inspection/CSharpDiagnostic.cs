@@ -14,6 +14,6 @@ namespace Jammo.TextAnalysis.DotNet.CSharp.Inspection
             Syntax = syntax;
         }
 
-        public abstract IEnumerable<CSharpDiagnosticFix> Fix(CSharpAnalysisCompilation context);
+        public abstract IEnumerable<DiagnosticFix> Fix(CSharpAnalysisCompilation context);
     }
 }

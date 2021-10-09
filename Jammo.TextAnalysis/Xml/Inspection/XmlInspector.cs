@@ -25,6 +25,7 @@ namespace Jammo.TextAnalysis.Xml.Inspection
                         break;
                     case XmlNodeType.Text:
                         await reader.GetValueAsync();
+                        
                         break;
                     case XmlNodeType.EndElement:
                         break;
